@@ -38,6 +38,8 @@ public class Environment : MonoBehaviour {
     }
 	}
 
+  private bool right = true;
+  private bool vertical = false;
 	// Update is called once per frame
 	void Update () {
     // check each alien, if it goes past the boundary, change all aliens directions and return

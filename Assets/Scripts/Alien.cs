@@ -31,7 +31,6 @@ public class Alien : MonoBehaviour {
     // if the delay time is up
     if(Time.time > timer && timer != 0) {
       vertical = false;
-      right = !right;
       Debug.Log(right);
       // flip the direction
       // Debug.Log("inside");
@@ -49,15 +48,18 @@ public class Alien : MonoBehaviour {
   // called when direction is outside of camera
   public void changeDirection() {
     vertical = true;
+    right = !right;
     // Debug.Log("changing");
     timer = Time.time + delay;
   }
 
   void moveLeft() {
-    gameObject.transform.position += Vector3.left;
+    // gameObject.transform.position += Vector3.left;
+    right = false;
   }
   void moveRight() {
-    gameObject.transform.position += Vector3.right;
+    // gameObject.transform.position += Vector3.right;
+    right = true;
   }
   void moveDown() {
     gameObject.transform.position += Vector3.down;
