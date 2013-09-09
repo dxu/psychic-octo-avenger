@@ -27,7 +27,6 @@ public class Bullet : MonoBehaviour {
 
   void OnCollisionEnter(Collision collision) {
     Collider collider = collision.collider;
-    Debug.Log(collision.gameObject);
     if(collider.CompareTag("Alien")) {
       Alien enemy = collider.gameObject.GetComponent<Alien>();
       enemy.die();
@@ -36,6 +35,7 @@ public class Bullet : MonoBehaviour {
     else if(collider.CompareTag("Shield")) {
       Shield shield = collider.gameObject.GetComponent<Shield>();
       shield.takeDamage();
+      die();
     }
     else {
       Debug.Log("Collided with " + collider.tag);
@@ -44,6 +44,6 @@ public class Bullet : MonoBehaviour {
 
   void die() {
     ship.reloaded = true;
-    Destroy(gameObject);
+    // Destroy(gameObject);
   }
 }

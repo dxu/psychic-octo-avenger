@@ -24,17 +24,10 @@ public class Alien : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-    // Debug.Log("outside");
-    // Debug.Log(Time.time);
-    // Debug.Log(timer);
-    // Debug.Log(vertical);
     // if the delay time is up
     if(Time.time > timer && timer != 0) {
       vertical = false;
-      Debug.Log(right);
       // flip the direction
-      // Debug.Log("inside");
-      // Debug.Log(Time.time);
     }
 
     if(vertical)
@@ -49,7 +42,6 @@ public class Alien : MonoBehaviour {
   public void changeDirection() {
     vertical = true;
     right = !right;
-    // Debug.Log("changing");
     timer = Time.time + delay;
   }
 

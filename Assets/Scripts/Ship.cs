@@ -27,7 +27,6 @@ public class Ship : MonoBehaviour {
     //
     if(Input.GetAxisRaw("Horizontal") > 0) {
       // gameObject.rigidbody.AddRelativeForce(speed);
-      // Debug.Log(gameObject.transform.x);
       gameObject.transform.position += Vector3.right * 0.1f;
     }
     if(Input.GetAxisRaw("Horizontal") < 0) {
@@ -50,19 +49,13 @@ public class Ship : MonoBehaviour {
 	}
 
   private Bullet createBullet() {
-    // Debug.Log("heloo");
     Vector3 spawnPos = gameObject.transform.position;
     spawnPos.y += 1.5f; // * Mathf.Sin(rotation * Mathf.PI/180);
 
     GameObject newBullet = Instantiate(Resources.Load("Prefabs/BulletPrefab"), spawnPos, Quaternion.identity) as GameObject;
     Bullet bulletComponent = newBullet.GetComponent<Bullet>();
-    // Debug.Log(gameObject);
-    // Debug.Log(newBullet);
-    // Debug.Log(bulletComponent);
     bulletComponent.ship = gameObject.GetComponent<Ship>();
 
-    // Debug.Log("in hereee");
-    // Debug.Log(bulletComponent);
 
     return bulletComponent;
   }
