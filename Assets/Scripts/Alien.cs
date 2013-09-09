@@ -2,35 +2,54 @@
 using System.Collections;
 
 public class Alien : MonoBehaviour {
-  public float velocity;
+  private float velocity;
   // true is vertical, false is horizontal
-  public bool direction;
+  public bool vertical;
+  // true is right, false is left
+  public bool right = true;
 
-  private float delay = 2;
+  private float delay = 0.5f;
   private float timer;
 
 	// Use this for initialization
 	void Start () {
-    velocity = 0.05f;
-    direction = false;
+    // velocity = 0.05f;
+    velocity = 0.1f;
+    vertical = false;
 	}
+  public float getVelocity() {
+    return velocity;
+  }
 
 	// Update is called once per frame
 	void Update () {
-    Debug.Log(velocity);
 
+    // Debug.Log("outside");
+    // Debug.Log(Time.time);
+    // Debug.Log(timer);
+    // Debug.Log(vertical);
     // if the delay time is up
-    if(Time.time > timer)
-      direction = false;
+    if(Time.time > timer && timer != 0) {
+      vertical = false;
+      right = !right;
+      Debug.Log(right);
+      // flip the direction
+      // Debug.Log("inside");
+      // Debug.Log(Time.time);
+    }
 
-    if(direction)
+    if(vertical)
       gameObject.transform.position -= new Vector3(0, velocity, 0);
     else
-      gameObject.transform.position += new Vector3(velocity, 0, 0);
+      if(right)
+        gameObject.transform.position += new Vector3(velocity, 0, 0);
+      else
+        gameObject.transform.position -= new Vector3(velocity, 0, 0);
 	}
   // called when direction is outside of camera
-  void changeDirection() {
-    direction = true;
+  public void changeDirection() {
+    vertical = true;
+    // Debug.Log("changing");
     timer = Time.time + delay;
   }
 
