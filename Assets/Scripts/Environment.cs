@@ -6,6 +6,7 @@ public class Environment : MonoBehaviour {
   private int rows = 5;
   private int cols = 11;
   private Alien[,] aliens;
+  private int shieldCount = 4;
   private Ship ship;
   private Vector3 br;
   private Vector3 tl;
@@ -28,6 +29,7 @@ public class Environment : MonoBehaviour {
     Vector3 offset = new Vector3(-(tl.x - br.x) / 2 / cols, (tl.y - br.y) / 2 / rows, 0);
     Debug.Log(start);
     Debug.Log(offset);
+    // generate aliens
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
         aliens[i, j] = (Instantiate(Resources.Load("Prefabs/AlienPrefab"),
@@ -35,6 +37,13 @@ public class Environment : MonoBehaviour {
             Quaternion.identity) as GameObject).GetComponent<Alien>();
         // Debug.Log(aliens[i,j]);
       }
+    }
+    // generate shields
+    for(int j = 0; j < cols; j++) {
+      aliens[i, j] = (Instantiate(Resources.Load("Prefabs/AlienPrefab"),
+          new Vector3(start.x + offset.x * j, start.y - offset.y * i, start.z),
+          Quaternion.identity) as GameObject).GetComponent<Alien>();
+      // Debug.Log(aliens[i,j]);
     }
 	}
 

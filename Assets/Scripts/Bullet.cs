@@ -33,6 +33,10 @@ public class Bullet : MonoBehaviour {
       enemy.die();
       die();
     }
+    else if(collider.CompareTag("Shield")) {
+      Shield shield = collider.gameObject.GetComponent<Shield>();
+      shield.takeDamage();
+    }
     else {
       Debug.Log("Collided with " + collider.tag);
     }
