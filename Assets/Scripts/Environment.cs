@@ -28,7 +28,7 @@ public class Environment : MonoBehaviour {
         new Vector3(0, br.y + 4, start.z),
         Quaternion.identity) as Ship;
 
-    Vector3 alienOffset = new Vector3(-(tl.x - br.x) / 2 / cols, (tl.y - br.y) / 2 / rows, 0);
+    Vector3 alienOffset = new Vector3(-(tl.x - br.x) / 2 / cols, (tl.y - br.y) / 3 / rows, 0);
     Vector3 shieldOffset = new Vector3(-(tl.x - br.x) / 5,
         br.y + 2.5f * 4.0f, 0);
     // generate aliens

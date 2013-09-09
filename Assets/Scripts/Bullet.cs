@@ -44,6 +44,6 @@ public class Bullet : MonoBehaviour {
 
   void die() {
     ship.reloaded = true;
-    // Destroy(gameObject);
+    Destroy(gameObject);
   }
 }
