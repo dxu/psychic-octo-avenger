@@ -10,11 +10,12 @@ public class Alien : MonoBehaviour {
 
   private float delay = 0.5f;
   private float timer;
+  private float fireChance = 0.0003f;
 
 	// Use this for initialization
 	void Start () {
     // velocity = 0.05f;
-    velocity = 0.1f;
+    velocity = 0.03f;
     vertical = false;
 	}
   public float getVelocity() {
@@ -32,17 +33,22 @@ public class Alien : MonoBehaviour {
 
     if(vertical)
       gameObject.transform.position -= new Vector3(0, velocity, 0);
-    else
+    else {
       if(right)
         gameObject.transform.position += new Vector3(velocity, 0, 0);
       else
         gameObject.transform.position -= new Vector3(velocity, 0, 0);
+    }
+    float chance = Random.Range(0.0f, 1.0f);
+    if(chance < fireChance)
+      fire();
 	}
   // called when direction is outside of camera
   public void changeDirection() {
     vertical = true;
     right = !right;
     timer = Time.time + delay;
+
   }
 
   void moveLeft() {
@@ -59,7 +65,23 @@ public class Alien : MonoBehaviour {
   void moveUp() {
     gameObject.transform.position += Vector3.up;
   }
+  AlienBullet fire() {
+    Vector3 spawnPos = gameObject.transform.position;
+    spawnPos.y += 1.5f; // * Mathf.Sin(rotation * Mathf.PI/180);
+
+    GameObject newBullet = Instantiate(Resources.Load("Prefabs/AlienBulletPrefab"), spawnPos, Quaternion.identity) as GameObject;
+    AlienBullet bulletComponent = newBullet.GetComponent<AlienBullet>();
+    bulletComponent.ship = gameObject.GetComponent<Alien>();
+
+    return bulletComponent;
+  }
   public void die() {
     Destroy(gameObject);
+    // update global score
+    GameObject g = GameObject.Find("Environment");
+    Environment globalObj = g.GetComponent<Environment>();
+    globalObj.score += 10;
+    AudioClip fireSound = (AudioClip)Resources.Load("Audio/invaderkilled");
+    AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
   }
 }

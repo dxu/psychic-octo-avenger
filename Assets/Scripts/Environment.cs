@@ -11,8 +11,15 @@ public class Environment : MonoBehaviour {
   private Ship ship;
   private Vector3 br;
   private Vector3 tl;
+  private UFO ufo;
+  private float ufoChance = 0.005f;
+  public int score = 0;
+  public int lives = 3;
+  Vector3 start;
 	// Use this for initialization
 	void Start () {
+
+
     // generate aliens in a grid
     Vector3 originScreen = Camera.main.WorldToScreenPoint(new Vector3(0,0,0));
     br = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,0,originScreen.z));
@@ -20,7 +27,7 @@ public class Environment : MonoBehaviour {
 
     aliens  = new Alien[rows, cols];
     shields  = new Shield[shieldCount];
-    Vector3 start = Camera.main.ScreenToWorldPoint(new Vector3(40, Screen.height - 40, originScreen.z));
+    start = Camera.main.ScreenToWorldPoint(new Vector3(40, Screen.height - 50, originScreen.z));
     start.z = 0;
 
     // generate the ship
@@ -45,14 +52,39 @@ public class Environment : MonoBehaviour {
           new Vector3(tl.x + shieldOffset.x * (i+1), shieldOffset.y, start.z),
           Quaternion.identity) as GameObject).GetComponent<Shield>();
     }
+
 	}
+
+  void spawnUFO() {
+    // generate ufo
+    ufo = (Instantiate(Resources.Load("Prefabs/UFOPrefab"),
+            new Vector3(tl.x, tl.y - 1, start.z),
+            Quaternion.identity) as GameObject).GetComponent<UFO>();
+    AudioClip fireSound = (AudioClip)Resources.Load("Audio/ufo_lowpitch");
+    AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
+  }
 
   private bool right = true;
   private bool vertical = false;
 	// Update is called once per frame
 	void Update () {
-    // check each alien, if it goes past the boundary, change all aliens directions and return
+    // check the ufo, if it exists, check if its out of boundaries
+    if(ufo != null) {
+      if(ufo.transform.position.x < tl.x || ufo.transform.position.x > br.x) {
+        ufo.die();
+        Debug.Log(ufo);
+      }
+    }
+    // chance to spawn ufo
+    else {
+      float chance = Random.Range(0.0f, 1.0f);
+      if(chance < ufoChance)
+        spawnUFO();
+    }
 
+
+
+    // check each alien, if it goes past the boundary, change all aliens directions and return
     foreach(Alien a in aliens) {
       // if going vertical, ignore
       if(a == null || a.vertical) {

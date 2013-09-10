@@ -7,16 +7,43 @@ public class Ship : MonoBehaviour {
   private Vector3 speed;
   // reloaded should be set to true when bullet dies
   public bool reloaded;
+  private int health = 300;
 	// Use this for initialization
 	void Start() {
-    speed.x = 4.0f;
+    speed.x = 3.0f;
     // Can i not set relaoded outside?
     reloaded = true;
+
+    // intro music
+    // AudioClip bg = (AudioClip)Resources.Load("Audio/spaceinvaders1");
+    // AudioSource.PlayClipAtPoint(bg, gameObject.transform.position);
 	}
 
   public GameObject bullet;
   public float rotation;
 
+  public void takeDamage() {
+    health -= 1;
+
+    GameObject g = GameObject.Find("Environment");
+    Environment globalObj = g.GetComponent<Environment>();
+    globalObj.lives = health;
+
+    AudioClip fireSound = (AudioClip)Resources.Load("Audio/explosion");
+    AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
+
+    if(health == 0) {
+      Debug.Log("YOU LOST THE GAME!");
+      die();
+    }
+
+  }
+
+  private void die() {
+    Destroy(gameObject);
+    // play the sound
+    Application.LoadLevel("GameOverScene");
+  }
 	// Update is called once per frame
   // Don't use physics to maintain the "jerkiness" of the original Space Invaders.
 	void Update() {
@@ -27,11 +54,11 @@ public class Ship : MonoBehaviour {
     //
     if(Input.GetAxisRaw("Horizontal") > 0) {
       // gameObject.rigidbody.AddRelativeForce(speed);
-      gameObject.transform.position += Vector3.right * 0.1f;
+      gameObject.transform.position += speed * 0.1f;
     }
     if(Input.GetAxisRaw("Horizontal") < 0) {
       // gameObject.rigidbody.AddRelativeForce(-speed);
-      gameObject.transform.position += Vector3.left * 0.1f;
+      gameObject.transform.position -= speed * 0.1f;
     }
     if(Input.GetButtonDown("Fire1") && reloaded) {
       /* we don’t want to spawn a Bullet inside our ship, so some
@@ -47,7 +74,6 @@ public class Ship : MonoBehaviour {
       reloaded = false;
     }
 	}
-
   private Bullet createBullet() {
     Vector3 spawnPos = gameObject.transform.position;
     spawnPos.y += 1.5f; // * Mathf.Sin(rotation * Mathf.PI/180);
@@ -55,6 +81,14 @@ public class Ship : MonoBehaviour {
     GameObject newBullet = Instantiate(Resources.Load("Prefabs/BulletPrefab"), spawnPos, Quaternion.identity) as GameObject;
     Bullet bulletComponent = newBullet.GetComponent<Bullet>();
     bulletComponent.ship = gameObject.GetComponent<Ship>();
+
+
+    // play the sound
+    AudioClip fireSound = (AudioClip)Resources.Load("Audio/shoot");
+    AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
+
+
+
 
 
     return bulletComponent;
