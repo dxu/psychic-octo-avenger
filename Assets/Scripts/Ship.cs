@@ -7,7 +7,7 @@ public class Ship : MonoBehaviour {
   private Vector3 speed;
   // reloaded should be set to true when bullet dies
   public bool reloaded;
-  private int health = 300;
+  private int health = 3;
   public Camera fpcam;
   public Camera maincam;
 	// Use this for initialization
