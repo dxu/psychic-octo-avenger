@@ -27,7 +27,7 @@ public class Environment : MonoBehaviour {
 
     aliens  = new Alien[rows, cols];
     shields  = new Shield[shieldCount];
-    start = Camera.main.ScreenToWorldPoint(new Vector3(40, Screen.height - 50, originScreen.z));
+    start = Camera.main.ScreenToWorldPoint(new Vector3(40, Screen.height - 100, originScreen.z));
     start.z = 0;
 
     // generate the ship
