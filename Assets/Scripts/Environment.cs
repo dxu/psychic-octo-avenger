@@ -15,7 +15,10 @@ public class Environment : MonoBehaviour {
   private float ufoChance = 0.005f;
   public int score = 0;
   public int lives = 3;
-  Vector3 start;
+  Vector3 alienStart; // start of aliens
+  Vector3 groundStart; // start of aliens
+  private int ground = 40; // the height of the ground in screen pixels
+
 	// Use this for initialization
 	void Start () {
 
@@ -27,12 +30,15 @@ public class Environment : MonoBehaviour {
 
     aliens  = new Alien[rows, cols];
     shields  = new Shield[shieldCount];
-    start = Camera.main.ScreenToWorldPoint(new Vector3(40, Screen.height - 100, originScreen.z));
-    start.z = 0;
+    alienStart = Camera.main.ScreenToWorldPoint(new Vector3(40, Screen.height - 100, originScreen.z));
+    alienStart.z = 0;
+
+    groundStart = Camera.main.ScreenToWorldPoint(new Vector3(0, 40, originScreen.z));
+    groundStart.z = 0;
 
     // generate the ship
     ship = Instantiate(Resources.Load("Prefabs/ShipPrefab"),
-        new Vector3(0, br.y + 4, start.z),
+        new Vector3(0, br.y + 4, alienStart.z),
         Quaternion.identity) as Ship;
 
     Vector3 alienOffset = new Vector3(-(tl.x - br.x) / 2 / cols, (tl.y - br.y) / 3 / rows, 0);
@@ -42,25 +48,26 @@ public class Environment : MonoBehaviour {
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
         aliens[i, j] = (Instantiate(Resources.Load("Prefabs/AlienPrefab"),
-            new Vector3(start.x + alienOffset.x * j, start.y - alienOffset.y * i, start.z),
+            new Vector3(alienStart.x + alienOffset.x * j, alienStart.y - alienOffset.y * i, alienStart.z),
             Quaternion.identity) as GameObject).GetComponent<Alien>();
       }
     }
     // generate shields
     for(int i = 0; i < shieldCount ; i++) {
       shields[i] = (Instantiate(Resources.Load("Prefabs/ShieldPrefab"),
-          new Vector3(tl.x + shieldOffset.x * (i+1), shieldOffset.y, start.z),
+          new Vector3(tl.x + shieldOffset.x * (i+1), shieldOffset.y, alienStart.z),
           Quaternion.identity) as GameObject).GetComponent<Shield>();
     }
 
     // generate the builder and fighter spawns, generate the players
+    // 30, 30 from
 
 	}
 
   void spawnUFO() {
     // generate ufo
     ufo = (Instantiate(Resources.Load("Prefabs/UFOPrefab"),
-            new Vector3(tl.x, tl.y - 1, start.z),
+            new Vector3(tl.x, tl.y - 1, alienStart.z),
             Quaternion.identity) as GameObject).GetComponent<UFO>();
     AudioClip fireSound = (AudioClip)Resources.Load("Audio/ufo_lowpitch");
     AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
