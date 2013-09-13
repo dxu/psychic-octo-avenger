@@ -53,6 +53,8 @@ public class Environment : MonoBehaviour {
           Quaternion.identity) as GameObject).GetComponent<Shield>();
     }
 
+    // generate the builder and fighter spawns, generate the players
+
 	}
 
   void spawnUFO() {
