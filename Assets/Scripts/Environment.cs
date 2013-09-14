@@ -17,11 +17,23 @@ public class Environment : MonoBehaviour {
   public int lives = 3;
   Vector3 alienStart; // start of aliens
   Vector3 groundStart; // start of aliens
-  private int ground = 40; // the height of the ground in screen pixels
+  private int groundHeight = 20; // the height of the ground in screen pixels
+  private Ground ground;
+  private Player1 player1;
+  private Player2 player2;
+  public Camera fpcam;
+  public Camera maincam;
 
 	// Use this for initialization
 	void Start () {
 
+    // setup cameras
+    fpcam = GameObject.Find("FPCamera").GetComponent<Camera>();
+    maincam = GameObject.Find("Main Camera").GetComponent<Camera>();
+    Debug.Log(fpcam);
+    Debug.Log(Camera.main);
+    fpcam.active = false;
+    maincam.active = true;
 
     // generate aliens in a grid
     Vector3 originScreen = Camera.main.WorldToScreenPoint(new Vector3(0,0,0));
@@ -33,13 +45,24 @@ public class Environment : MonoBehaviour {
     alienStart = Camera.main.ScreenToWorldPoint(new Vector3(40, Screen.height - 100, originScreen.z));
     alienStart.z = 0;
 
-    groundStart = Camera.main.ScreenToWorldPoint(new Vector3(0, 40, originScreen.z));
+    groundStart = Camera.main.ScreenToWorldPoint(new Vector3(0, groundHeight, originScreen.z));
+    groundStart.x = 0;
     groundStart.z = 0;
+    // generate ground
+    ground = Instantiate(Resources.Load("Prefabs/GroundPrefab"),
+        groundStart,
+        Quaternion.identity) as Ground;
+    // generate player 1 and 2
+    player1 = Instantiate(Resources.Load("Prefabs/Player1Prefab"),
+        groundStart - new Vector3(0, -3, 0),
+        Quaternion.identity) as Player1;
+
+    // generate the builder and fighter spawns
 
     // generate the ship
-    ship = Instantiate(Resources.Load("Prefabs/ShipPrefab"),
-        new Vector3(0, br.y + 4, alienStart.z),
-        Quaternion.identity) as Ship;
+    // ship = Instantiate(Resources.Load("Prefabs/ShipPrefab"),
+    //     new Vector3(0, br.y + 4, alienStart.z),
+    //     Quaternion.identity) as Ship;
 
     Vector3 alienOffset = new Vector3(-(tl.x - br.x) / 2 / cols, (tl.y - br.y) / 3 / rows, 0);
     Vector3 shieldOffset = new Vector3(-(tl.x - br.x) / 5,
@@ -77,6 +100,14 @@ public class Environment : MonoBehaviour {
   private bool vertical = false;
 	// Update is called once per frame
 	void Update () {
+    // camera logic
+    if(Input.GetButtonDown("Fire2")) {
+      // switch camera
+      fpcam.active = !fpcam.active;
+      maincam.active = !maincam.active;
+    }
+
+
     // check the ufo, if it exists, check if its out of boundaries
     if(ufo != null) {
       if(ufo.transform.position.x < tl.x || ufo.transform.position.x > br.x) {

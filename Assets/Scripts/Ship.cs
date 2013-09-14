@@ -8,19 +8,11 @@ public class Ship : MonoBehaviour {
   // reloaded should be set to true when bullet dies
   public bool reloaded;
   private int health = 3;
-  public Camera fpcam;
-  public Camera maincam;
 	// Use this for initialization
 	void Start() {
     speed.x = 3.0f;
     // Can i not set relaoded outside?
     reloaded = true;
-    fpcam = GameObject.Find("FPCamera").GetComponent<Camera>();
-    maincam = GameObject.Find("Main Camera").GetComponent<Camera>();
-    Debug.Log(fpcam);
-    Debug.Log(Camera.main);
-    fpcam.active = false;
-    maincam.active = true;
 
     // intro music
     // AudioClip bg = (AudioClip)Resources.Load("Audio/spaceinvaders1");
@@ -81,11 +73,6 @@ public class Ship : MonoBehaviour {
       Quaternion rot = Quaternion.Euler(new Vector3(0,rotation,0));
       b.heading = rot;
       reloaded = false;
-    }
-    if(Input.GetButtonDown("Fire2")) {
-      // switch camera
-      fpcam.active = !fpcam.active;
-      maincam.active = !maincam.active;
     }
 	}
   private Bullet createBullet() {
