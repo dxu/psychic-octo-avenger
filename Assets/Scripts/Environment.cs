@@ -21,6 +21,8 @@ public class Environment : MonoBehaviour {
   private Ground ground;
   private Player1 player1;
   private Player2 player2;
+  private BuilderSpawn builderSpawn;
+  private FighterSpawn fighterSpawn;
   public Camera fpcam;
   public Camera maincam;
 
@@ -54,10 +56,18 @@ public class Environment : MonoBehaviour {
         Quaternion.identity) as Ground;
     // generate player 1 and 2
     player1 = Instantiate(Resources.Load("Prefabs/Player1Prefab"),
-        groundStart - new Vector3(0, -3, 0),
+        groundStart - new Vector3(5, -3, 0),
         Quaternion.identity) as Player1;
-
+    player2 = Instantiate(Resources.Load("Prefabs/Player2Prefab"),
+        groundStart - new Vector3(-5, -3, 0),
+        Quaternion.identity) as Player2;
     // generate the builder and fighter spawns
+    builderSpawn = Instantiate(Resources.Load("Prefabs/BuilderSpawnPrefab"),
+        new Vector3(tl.x + 1.5f, groundStart.y + 3.0f, 0),
+        Quaternion.identity) as BuilderSpawn;
+    fighterSpawn = Instantiate(Resources.Load("Prefabs/FighterSpawnPrefab"),
+        new Vector3(br.x - 1.5f, groundStart.y + 3.0f, 0),
+        Quaternion.identity) as FighterSpawn;
 
     // generate the ship
     // ship = Instantiate(Resources.Load("Prefabs/ShipPrefab"),
