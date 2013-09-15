@@ -19,9 +19,9 @@ public class AlienBullet : MonoBehaviour {
       player.takeDamage();
       die();
     }
-    else if(collider.CompareTag("Shield")) {
-      Shield shield = collider.gameObject.GetComponent<Shield>();
-      shield.takeDamage();
+    else if(collider.CompareTag("Platform")) {
+      Platform platform = collider.gameObject.GetComponent<Platform>();
+      platform.takeDamage();
       die();
     }
     else if(collider.CompareTag("Alien")) {
