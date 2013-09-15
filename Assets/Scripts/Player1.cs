@@ -148,12 +148,12 @@ public class Player1 : MonoBehaviour {
   void OnCollisionEnter(Collision collision) {
     // right itself
     // gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-    foreach(ContactPoint contact in collision.contacts) {
-      if(Vector3.Angle(contact.normal, Vector3.up) < maxSlope){
+    // foreach(ContactPoint contact in collision.contacts) {
+    //   if(Vector3.Angle(contact.normal, Vector3.up) < maxSlope){
         grounded = true;
         doubleJump = true;
-      }
-    }
+    //   }
+    // }
 
     Collider collider = collision.collider;
     if(collider.CompareTag("BuilderSpawn")) {
