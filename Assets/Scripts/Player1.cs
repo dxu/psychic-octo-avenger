@@ -100,14 +100,8 @@ public class Player1 : MonoBehaviour {
       }
     }
     else if(Input.GetButtonDown("Jump") && doubleJump){
-      // rotate
-      // gameObject.transform.Rotate(new Vector3(0, 0, 360));
-      // Quaternion.LookRotation()
-      // gameObject.transform.rotation = Quaternion.Slerp(0.0f, 360.0f, Time.deltaTime * 0.1f);
-      // gameObject.transform.RotateAround(gameObject.transform.position, gameObject.transform.position, 360f);
 
       Debug.Log("HOEJJ");
-      // xrotation(gameObject.transform, new Vector3(0, 0, 360.0f), 2.0f);
       rigidbody.AddTorque(new Vector3(0, 0, 3000.0f));
 
 
@@ -131,29 +125,11 @@ public class Player1 : MonoBehaviour {
 
   }
 
-  IEnumerator xrotation (Transform thisTransform, Vector3 degrees , float time) {
-    Debug.Log("inside here");
-    Quaternion startRotation = thisTransform.rotation;
-    Quaternion endRotation = thisTransform.rotation * Quaternion.Euler(degrees);
-    float rate = 1.0f/time;
-    float t = 0.0f;
-    while (t < 1.0f) {
-      t += Time.deltaTime * rate;
-      thisTransform.rotation = Quaternion.Slerp(startRotation, endRotation, t);
-      yield return 0;
-    }
-  }
-
 
   void OnCollisionEnter(Collision collision) {
     // right itself
-    // gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-    // foreach(ContactPoint contact in collision.contacts) {
-    //   if(Vector3.Angle(contact.normal, Vector3.up) < maxSlope){
-        grounded = true;
-        doubleJump = true;
-    //   }
-    // }
+    grounded = true;
+    doubleJump = true;
 
     Collider collider = collision.collider;
     if(collider.CompareTag("BuilderSpawn")) {
