@@ -28,6 +28,9 @@ public class AlienBullet : MonoBehaviour {
     }
     else if(collider.CompareTag("Alien")) {
       if(reflected) {
+        Alien alien = collider.gameObject.GetComponent<Alien>();
+        alien.takeDamage();
+        die();
       }
     }
     else if(collider.CompareTag("Shield")) {
@@ -35,6 +38,7 @@ public class AlienBullet : MonoBehaviour {
       // reflect only if player isn't shielded
       Shield shield = collider.GetComponent<Shield>();
       if(shield.activated) {
+        reflected = true;
         Vector3 avg = new Vector3(0,0,0);
         // average over the collision's contact points is the normal
         foreach(ContactPoint contact in collision.contacts) {
@@ -54,6 +58,9 @@ public class AlienBullet : MonoBehaviour {
     else if(collider.CompareTag("Player")){
       // TODO: Figure out why it never hits player when shield is down
     	Debug.Log("Hit player. should not happen");
+    }
+    else if(collider.CompareTag("Ground")){
+      die();
     }
     else {
       Debug.Log("Collided with " + collider.tag);

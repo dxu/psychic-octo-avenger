@@ -7,6 +7,7 @@ public class Environment : MonoBehaviour {
   private int cols = 11;
   private Alien[,] aliens;
   private Platform[] platforms;
+  private Human[] humans;
   private int platformCount = 4;
   private Ship ship;
   private Vector3 br;
@@ -20,7 +21,6 @@ public class Environment : MonoBehaviour {
   private int groundHeight = 20; // the height of the ground in screen pixels
   private Ground ground;
   private Player1 player1;
-  private Player2 player2;
   private BuilderSpawn builderSpawn;
   private FighterSpawn fighterSpawn;
   public Camera fpcam;
@@ -40,6 +40,8 @@ public class Environment : MonoBehaviour {
     br = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,0,originScreen.z));
     tl = Camera.main.ScreenToWorldPoint(new Vector3(0,Screen.height,originScreen.z));
 
+    humans  = new Human[20];
+
     aliens  = new Alien[rows, cols];
     platforms  = new Platform[platformCount];
     alienStart = Camera.main.ScreenToWorldPoint(new Vector3(40, Screen.height - 100, originScreen.z));
@@ -56,9 +58,6 @@ public class Environment : MonoBehaviour {
     player1 = Instantiate(Resources.Load("Prefabs/Player1Prefab"),
         groundStart - new Vector3(5, -3, 0),
         Quaternion.identity) as Player1;
-    player2 = Instantiate(Resources.Load("Prefabs/Player2Prefab"),
-        groundStart - new Vector3(-5, -3, 0),
-        Quaternion.identity) as Player2;
     // generate the builder and fighter spawns
     builderSpawn = Instantiate(Resources.Load("Prefabs/BuilderSpawnPrefab"),
         new Vector3(tl.x + 1.5f, groundStart.y + 3.0f, 0),
@@ -66,6 +65,13 @@ public class Environment : MonoBehaviour {
     fighterSpawn = Instantiate(Resources.Load("Prefabs/FighterSpawnPrefab"),
         new Vector3(br.x - 1.5f, groundStart.y + 3.0f, 0),
         Quaternion.identity) as FighterSpawn;
+    // generate 20 humans
+    for(int i=0; i<humans.GetLength(0); i++) {
+      humans[i] = Instantiate(Resources.Load("Prefabs/HumanPrefab"),
+        new Vector3(Random.Range(br.x - 2.0f,tl.x + 2.0f) , groundStart.y + 3.0f, 0),
+        Quaternion.identity) as Human;
+    }
+
 
     // generate the ship
     // ship = Instantiate(Resources.Load("Prefabs/ShipPrefab"),

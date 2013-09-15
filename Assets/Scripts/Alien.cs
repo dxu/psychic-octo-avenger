@@ -8,6 +8,8 @@ public class Alien : MonoBehaviour {
   // true is right, false is left
   public bool right = true;
 
+  private int health = 1;
+
   private float delay = 0.5f;
   private float timer;
   private float fireChance = 0.0003f;
@@ -49,6 +51,13 @@ public class Alien : MonoBehaviour {
     right = !right;
     timer = Time.time + delay;
 
+  }
+
+  public void takeDamage() {
+    health -= 1;
+    if(health == 0) {
+      die();
+    }
   }
 
   void moveLeft() {
