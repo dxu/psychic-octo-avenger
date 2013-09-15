@@ -5,6 +5,7 @@ public class AlienBullet : MonoBehaviour {
 
   Vector3 thrust;
   float speed = 0.25f;
+  private bool reflected = false;
   public Vector3 direction = new Vector3(0, -1, 0);
   public Alien ship;
 	// Use this for initialization
@@ -26,6 +27,9 @@ public class AlienBullet : MonoBehaviour {
       die();
     }
     else if(collider.CompareTag("Alien")) {
+      // if it's been reflected, hurts aliens
+      if(reflected) {
+      }
     }
     else if(collider.CompareTag("Shield")) {
 
@@ -37,6 +41,8 @@ public class AlienBullet : MonoBehaviour {
       avg /= collision.contacts.GetLength(0);
       Debug.Log("his");
       Debug.Log(avg);
+      direction = Vector3.Reflect(gameObject.transform.position, avg);
+      direction.Normalize();
     }
     else if(collider.CompareTag("Player")){
     	Debug.Log("Hit");

@@ -86,12 +86,14 @@ public class Player1 : MonoBehaviour {
       }
       else {
         shield.transform.localScale = new Vector3(2,2,0);
+        // shield.collider.enabled = true;
       }
     }
 
     // hide the shield on button up
     if(Input.GetButtonUp("Fire1-2")) {
       shield.transform.localScale = new Vector3(0,0,0);
+        // shield.collider.enabled = false;
     }
   }
 
