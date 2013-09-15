@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Shield : MonoBehaviour {
 
-  private int health = 10;
+  private int health = 3;
 	// Use this for initialization
 	void Start () {
 
@@ -11,8 +11,6 @@ public class Shield : MonoBehaviour {
 
   public void takeDamage() {
     health -= 1;
-    Debug.Log("took damage!");
-    Debug.Log(health);
     if(health == 0) {
       die();
     }

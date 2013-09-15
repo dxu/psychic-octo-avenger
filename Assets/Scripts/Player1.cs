@@ -12,6 +12,9 @@ public class Player1 : MonoBehaviour {
   private Ray ray;
   private RaycastHit hit;
 
+  private bool builder = true;
+  private int wood = 5;
+
   private Vector3 speed = new Vector3(9.0f, 0, 0);// = new Vector3(3.0f, 0, 0);
   private Vector3 horizontalMovement;
   private float walkAcceleration = 6000.0f;
@@ -30,56 +33,14 @@ public class Player1 : MonoBehaviour {
     collider = GetComponent<BoxCollider>();
     size = collider.size;
     center = collider.center;
-    // Physics.gravity = new Vector3(0, -5, 0);
+    Physics.gravity = new Vector3(0, -50, 0);
 	}
 
 	// Update is called once per frame
   void Update() {
-    // vertical movement handling - physics not working
-    if(grounded) {
-      verticalMovement = 0;
-
-      if(Input.GetButtonDown("Jump") && grounded) {
-        // rigidbody.AddRelativeForce(0, jumpAcceleration, 0);
-        verticalMovement = jumpHeight;
-      }
-    }
-    else if(Input.GetButtonDown("Jump") && doubleJump){
-      // rigidbody.AddRelativeForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcceleration, 0);
-      doubleJump = false;
-    }
-    verticalMovement += Physics.gravity.y * Time.deltaTime;
-    moveVertical(verticalMovement * Time.deltaTime);
   }
 
   void moveVertical(float distance) {
-    grounded = false;
-    for(int i=0; i<3; i++) {
-      float dir = Mathf.Sign(distance);
-      // left center right rays
-      float x = (transform.position.x + center.x - size.x / 2) + size.x / 2 * i;
-      float y = transform.position.y + center.y + size.y / 2 * dir;
-
-      ray = new Ray(new Vector2(x,y), new Vector2(0, dir));
-      Debug.DrawRay(ray.origin, ray.direction);
-      // Debug.Log(Physics.Raycast(ray, out hit, Mathf.Abs(distance), collisionMask));
-      if(Physics.Raycast(ray, out hit, Mathf.Abs(distance), collisionMask)){
-        Debug.Log("hello");
-        float dst = Vector3.Distance(ray.origin, hit.point);
-        if(dst > skin) {
-          distance = -dst + skin;
-        }
-        else {
-          distance = 0;
-        }
-        // Debug.Log(distance);
-        grounded = true;
-        doubleJump = true;
-        break;
-      }
-      Debug.Log(hit);
-    }
-    transform.Translate(new Vector2(0, distance));
   }
 
 	void FixedUpdate () {
@@ -108,20 +69,63 @@ public class Player1 : MonoBehaviour {
     }
 
 
+    // vertical movement handling
+    if(grounded) {
+      verticalMovement = 0;
+
+      if(Input.GetButtonDown("Jump") && grounded) {
+        rigidbody.AddRelativeForce(0, jumpAcceleration, 0);
+        verticalMovement = jumpHeight;
+      Debug.Log("JUMPED");
+      }
+    }
+    else if(Input.GetButtonDown("Jump") && doubleJump){
+      rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
+      rigidbody.AddRelativeForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcceleration, 0);
+      doubleJump = false;
+      Debug.Log("ho");
+    }
+    verticalMovement += Physics.gravity.y * Time.deltaTime;
+    moveVertical(verticalMovement * Time.deltaTime);
+
+
+    // keypresses
+    if(Input.GetButtonDown("Fire1")) {
+      if(wood > 0) {
+        // generate a shield
+        Shield shield = (Instantiate(Resources.Load("Prefabs/ShieldPrefab"),
+            gameObject.transform.position, Quaternion.identity) as GameObject).GetComponent<Shield>();
+        wood -= 1;
+      }
+    }
+
   }
 
 
-  // void OnCollisionStay(Collision collision) {
-  //   foreach(ContactPoint contact in collision.contacts) {
-  //     if(Vector3.Angle(contact.normal, Vector3.up) < maxSlope){
-  //       grounded = true;
-  //     }
-  //   }
-  // }
+  void OnCollisionEnter(Collision collision) {
+    foreach(ContactPoint contact in collision.contacts) {
+      if(Vector3.Angle(contact.normal, Vector3.up) < maxSlope){
+        grounded = true;
+        doubleJump = true;
+      }
+    }
 
-  // void OnCollisionExit() {
-  //   grounded = false;
-  // }
+    Collider collider = collision.collider;
+    if(collider.CompareTag("BuilderSpawn")) {
+      Debug.Log("Now a buidler");
+      builder = true;
+    }
+    else if(collider.CompareTag("FighterSpawn")) {
+      Debug.Log("Now a gfighter");
+      builder = false;
+    }
+    // if it's the builderspawn
+
+  }
+
+  void OnCollisionExit() {
+    grounded = false;
+  }
 
 
 }

@@ -14,7 +14,6 @@ public class AlienBullet : MonoBehaviour {
 
   void OnCollisionEnter(Collision collision) {
     Collider collider = collision.collider;
-    // Debug.Log(collider.tag);
     if(collider.CompareTag("Ship")) {
       Ship player = collider.gameObject.GetComponent<Ship>();
       player.takeDamage();
