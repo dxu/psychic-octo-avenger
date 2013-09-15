@@ -4,7 +4,8 @@ using System.Collections;
 public class AlienBullet : MonoBehaviour {
 
   Vector3 thrust;
-  Vector3 velocity = new Vector3(0, -0.25f, 0);
+  float speed = 0.25f;
+  public Vector3 direction = new Vector3(0, -1, 0);
   public Alien ship;
 	// Use this for initialization
 	void Start () {
@@ -26,14 +27,44 @@ public class AlienBullet : MonoBehaviour {
     }
     else if(collider.CompareTag("Alien")) {
     }
+    else if(collider.CompareTag("Shield")) {
+
+      Vector3 avg = new Vector3(0,0,0);
+      // average over the collision's contact points is the normal
+      foreach(ContactPoint contact in collision.contacts) {
+        avg += contact.normal;
+      }
+      avg /= collision.contacts.GetLength(0);
+      Debug.Log("his");
+      Debug.Log(avg);
+    }
+    else if(collider.CompareTag("Player")){
+    	Debug.Log("Hit");
+    }
     else {
       Debug.Log("Collided with " + collider.tag);
     }
   }
 
+  // void OnTriggerEnter(Collider collider){
+  //   if(collider.CompareTag("Shield")) {
+
+  //     Vector3 avg = new Vector3(0,0,0);
+  //     // average over the collision's contact points is the normal
+  //     foreach(ContactPoint contact in collision.contacts) {
+  //       avg += contact.normal;
+  //     }
+  //     avg /= collision.contacts.GetLength(0);
+  //     Debug.Log("his");
+  //     Debug.Log(avg);
+  //   }
+
+
+  // }
+
 	// Update is called once per frame
 	void Update () {
-    gameObject.transform.position += velocity;
+    gameObject.transform.position += speed * direction;
 
 	}
 

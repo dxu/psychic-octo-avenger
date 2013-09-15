@@ -6,8 +6,8 @@ public class Environment : MonoBehaviour {
   private int rows = 5;
   private int cols = 11;
   private Alien[,] aliens;
-  private Shield[] shields;
-  private int shieldCount = 4;
+  private Platform[] platforms;
+  private int platformCount = 4;
   private Ship ship;
   private Vector3 br;
   private Vector3 tl;
@@ -41,7 +41,7 @@ public class Environment : MonoBehaviour {
     tl = Camera.main.ScreenToWorldPoint(new Vector3(0,Screen.height,originScreen.z));
 
     aliens  = new Alien[rows, cols];
-    shields  = new Shield[shieldCount];
+    platforms  = new Platform[platformCount];
     alienStart = Camera.main.ScreenToWorldPoint(new Vector3(40, Screen.height - 100, originScreen.z));
     alienStart.z = 0;
 
@@ -73,7 +73,7 @@ public class Environment : MonoBehaviour {
     //     Quaternion.identity) as Ship;
 
     Vector3 alienOffset = new Vector3(-(tl.x - br.x) / 2 / cols, (tl.y - br.y) / 3 / rows, 0);
-    Vector3 shieldOffset = new Vector3(-(tl.x - br.x) / 5,
+    Vector3 platformOffset = new Vector3(-(tl.x - br.x) / 5,
         br.y + 2.5f * 4.0f, 0);
     // generate aliens
     for(int i = 0; i < rows; i++) {
@@ -83,11 +83,11 @@ public class Environment : MonoBehaviour {
             Quaternion.identity) as GameObject).GetComponent<Alien>();
       }
     }
-    // generate shields
-    for(int i = 0; i < shieldCount ; i++) {
-      shields[i] = (Instantiate(Resources.Load("Prefabs/ShieldPrefab"),
-          new Vector3(tl.x + shieldOffset.x * (i+1), shieldOffset.y, alienStart.z),
-          Quaternion.identity) as GameObject).GetComponent<Shield>();
+    // generate platforms
+    for(int i = 0; i < platformCount ; i++) {
+      platforms[i] = (Instantiate(Resources.Load("Prefabs/PlatformPrefab"),
+          new Vector3(tl.x + platformOffset.x * (i+1), platformOffset.y, alienStart.z),
+          Quaternion.identity) as GameObject).GetComponent<Platform>();
     }
 
     // generate the builder and fighter spawns, generate the players

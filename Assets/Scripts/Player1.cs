@@ -12,7 +12,7 @@ public class Player1 : MonoBehaviour {
   private Ray ray;
   private RaycastHit hit;
 
-  private bool builder = true;
+  private bool builder = false;
   private int wood = 5;
 
   private Vector3 speed = new Vector3(9.0f, 0, 0);// = new Vector3(3.0f, 0, 0);
@@ -20,7 +20,9 @@ public class Player1 : MonoBehaviour {
   private float walkAcceleration = 6000.0f;
   private float walkDeAcc = 0.2f;
   private float walkDeAccVolx;
-  private float jumpAcceleration = 1000.0f;
+  private float builderJumpAcc = 1000.0f;
+  private float fighterJumpAcc = 850.0f;
+  private float jumpAcc;
   private float airDragRatio = 0.3f;
 	// Use this for initialization
   private float maxWalkSpeed = 10;
@@ -31,14 +33,27 @@ public class Player1 : MonoBehaviour {
 
 
   Sword sword;
+  Shield shield;
 	void Start () {
-
     collider = GetComponent<BoxCollider>();
     size = collider.size;
     center = collider.center;
     Physics.gravity = new Vector3(0, -50, 0);
     sword = gameObject.GetComponentInChildren<Sword>();
+    shield = gameObject.GetComponentInChildren<Shield>();
+    // initialize stats
+    updateClass();
 	}
+
+  // changes class stats
+  void updateClass(){
+    if(builder) {
+      jumpAcc = builderJumpAcc;
+    }
+    else {
+      jumpAcc = fighterJumpAcc;
+    }
+  }
 
   private float delay = 0.05f;
   private float swordTimer;
@@ -49,14 +64,34 @@ public class Player1 : MonoBehaviour {
       sword.active = false;
     }
 
-    if(Input.GetButtonDown("Fire1-2")) {
+    // keypresses
+    if(Input.GetButtonDown("Fire1")) {
+      if(builder) {
+        if(wood > 0) {
+          // generate a shield
+          Platform platform = (Instantiate(Resources.Load("Prefabs/PlatformPrefab"),
+              gameObject.transform.position + new Vector3(0, renderer.bounds.size.y/2 * 2.5f , 0),
+              Quaternion.identity) as GameObject).GetComponent<Platform>();
+          wood -= 1;
+        }
+      }
+    }
+    else if(Input.GetButtonDown("Fire1-2")) {
       // grab child
       Debug.Log("INSIDE");
-      // generate a sword attack, right and middle
-      // BuilderAttack particles = (Instantiate(Resources.Load("Prefabs/BuilderAttackPrefab"),
-      //       gameObject.transform.position + new Vector3(), Quaternion.identity) as GameObject).GetComponent<BuilderAttack>();
-      sword.active = true;
-      swordTimer = Time.time + delay;
+      // activate sword - class behavior determind in the sword class
+      if(builder){
+        sword.active = true;
+        swordTimer = Time.time + delay;
+      }
+      else {
+        shield.transform.localScale = new Vector3(2,2,0);
+      }
+    }
+
+    // hide the shield on button up
+    if(Input.GetButtonUp("Fire1-2")) {
+      shield.transform.localScale = new Vector3(0,0,0);
     }
   }
 
@@ -64,9 +99,7 @@ public class Player1 : MonoBehaviour {
   }
 
 	void FixedUpdate () {
-    // Debug.Log(grounded);
     // set up max speed
-    // horizontalMovement = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y, 0);
     horizontalMovement = new Vector3(rigidbody.velocity.x, 0, 0);
     if(horizontalMovement.magnitude > maxWalkSpeed) {
       horizontalMovement = horizontalMovement.normalized * maxWalkSpeed;
@@ -80,48 +113,31 @@ public class Player1 : MonoBehaviour {
       rigidbody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * airDragRatio * Time.fixedDeltaTime, 0, 0));
     }
 
-    // Debug.Log(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * Time.fixedDeltaTime, 0, 0));
-
-
     // slow down
     if(grounded) {
       rigidbody.velocity = new Vector3(Mathf.SmoothDamp(rigidbody.velocity.x, 0.0f, ref walkDeAccVolx, walkDeAcc), rigidbody.velocity.y, 0);
     }
-
 
     // vertical movement handling
     if(grounded) {
       verticalMovement = 0;
 
       if(Input.GetButtonDown("Jump") && grounded) {
-        rigidbody.AddForce(0, jumpAcceleration, 0);
+        // reset vertical velocity to get full jump height
+        rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
+        rigidbody.AddForce(0, jumpAcc, 0);
         verticalMovement = jumpHeight;
-      Debug.Log("JUMPED");
+      Debug.Log("JUMPED" + jumpAcc);
       }
     }
     else if(Input.GetButtonDown("Jump") && doubleJump){
-
-      Debug.Log("HOEJJ");
       rigidbody.AddTorque(new Vector3(0, 0, 3000.0f));
-
-
       rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
-      rigidbody.AddForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcceleration, 0);
+      rigidbody.AddForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcc, 0);
       doubleJump = false;
     }
     verticalMovement += Physics.gravity.y * Time.deltaTime;
     moveVertical(verticalMovement * Time.deltaTime);
-
-
-    // keypresses
-    if(Input.GetButtonDown("Fire1")) {
-      if(wood > 0) {
-        // generate a shield
-        Shield shield = (Instantiate(Resources.Load("Prefabs/ShieldPrefab"),
-            gameObject.transform.position, Quaternion.identity) as GameObject).GetComponent<Shield>();
-        wood -= 1;
-      }
-    }
 
   }
 
@@ -135,10 +151,12 @@ public class Player1 : MonoBehaviour {
     if(collider.CompareTag("BuilderSpawn")) {
       Debug.Log("Now a buidler");
       builder = true;
+      updateClass();
     }
     else if(collider.CompareTag("FighterSpawn")) {
       Debug.Log("Now a gfighter");
       builder = false;
+      updateClass();
     }
     // if it's the builderspawn
 

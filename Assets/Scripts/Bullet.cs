@@ -41,9 +41,9 @@ public class Bullet : MonoBehaviour {
       globalObj.score += Random.Range(50, 200);
       die();
     }
-    else if(collider.CompareTag("Shield")) {
-      Shield shield = collider.gameObject.GetComponent<Shield>();
-      shield.takeDamage();
+    else if(collider.CompareTag("Platform")) {
+      Platform platform = collider.gameObject.GetComponent<Platform>();
+      platform.takeDamage();
       die();
     }
     else {
