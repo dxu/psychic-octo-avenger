@@ -28,16 +28,36 @@ public class Player1 : MonoBehaviour {
   private bool doubleJump;
   private float maxSlope = 60;
   private float jumpHeight = 15;
+
+
+  Sword sword;
 	void Start () {
 
     collider = GetComponent<BoxCollider>();
     size = collider.size;
     center = collider.center;
     Physics.gravity = new Vector3(0, -50, 0);
+    sword = gameObject.GetComponentInChildren<Sword>();
 	}
 
+  private float delay = 0.05f;
+  private float swordTimer;
 	// Update is called once per frame
   void Update() {
+    // if the delay time is up, hide
+    if(Time.time > swordTimer && swordTimer != 0) {
+      sword.active = false;
+    }
+
+    if(Input.GetButtonDown("Fire1-2")) {
+      // grab child
+      Debug.Log("INSIDE");
+      // generate a sword attack, right and middle
+      // BuilderAttack particles = (Instantiate(Resources.Load("Prefabs/BuilderAttackPrefab"),
+      //       gameObject.transform.position + new Vector3(), Quaternion.identity) as GameObject).GetComponent<BuilderAttack>();
+      sword.active = true;
+      swordTimer = Time.time + delay;
+    }
   }
 
   void moveVertical(float distance) {
@@ -80,10 +100,19 @@ public class Player1 : MonoBehaviour {
       }
     }
     else if(Input.GetButtonDown("Jump") && doubleJump){
+      // rotate
+      // gameObject.transform.Rotate(new Vector3(0, 0, 360));
+      // Quaternion.LookRotation()
+      // gameObject.transform.rotation = Quaternion.Slerp(0.0f, 360.0f, Time.deltaTime * 0.1f);
+      // gameObject.transform.RotateAround(gameObject.transform.position, gameObject.transform.position, 360f);
+
+      Debug.Log("HOEJJ");
+      xrotation(gameObject.transform, new Vector3(0, 0, 360.0f), 2.0f);
+
+
       rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
       rigidbody.AddRelativeForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcceleration, 0);
       doubleJump = false;
-      Debug.Log("ho");
     }
     verticalMovement += Physics.gravity.y * Time.deltaTime;
     moveVertical(verticalMovement * Time.deltaTime);
@@ -99,6 +128,19 @@ public class Player1 : MonoBehaviour {
       }
     }
 
+  }
+
+  IEnumerator xrotation (Transform thisTransform, Vector3 degrees , float time) {
+    Debug.Log("inside here");
+    Quaternion startRotation = thisTransform.rotation;
+    Quaternion endRotation = thisTransform.rotation * Quaternion.Euler(degrees);
+    float rate = 1.0f/time;
+    float t = 0.0f;
+    while (t < 1.0f) {
+      t += Time.deltaTime * rate;
+      thisTransform.rotation = Quaternion.Slerp(startRotation, endRotation, t);
+      yield return 0;
+    }
   }
 
 
