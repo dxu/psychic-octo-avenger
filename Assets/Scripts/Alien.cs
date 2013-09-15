@@ -56,6 +56,13 @@ public class Alien : MonoBehaviour {
   public void takeDamage() {
     health -= 1;
     if(health == 0) {
+      // generate a random bunch of wood
+
+      for(int i=0; i<Random.Range(0, 9.0f); i++){
+        Wood wood = Instantiate(Resources.Load("Prefabs/WoodPrefab"),
+            gameObject.transform.position, Quaternion.identity) as Wood;
+      }
+
       die();
     }
   }

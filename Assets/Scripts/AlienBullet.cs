@@ -49,6 +49,8 @@ public class AlienBullet : MonoBehaviour {
         Debug.Log(avg);
         direction = Vector3.Reflect(gameObject.transform.position, avg);
         direction.Normalize();
+        direction += rigidbody.velocity;
+        // TODO: add to the direction vector of the player
       }
       else {
         shield.transform.parent.GetComponent<Player1>().takeDamage();
@@ -58,6 +60,11 @@ public class AlienBullet : MonoBehaviour {
     else if(collider.CompareTag("Player")){
       // TODO: Figure out why it never hits player when shield is down
     	Debug.Log("Hit player. should not happen");
+    }
+    else if(collider.CompareTag("Human")){
+      Human human = collider.gameObject.GetComponent<Human>();
+      human.takeDamage();
+      die();
     }
     else if(collider.CompareTag("Ground")){
       die();

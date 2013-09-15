@@ -45,6 +45,7 @@ public class Player1 : MonoBehaviour {
     Physics.gravity = new Vector3(0, -50, 0);
     sword = gameObject.GetComponentInChildren<Sword>();
     shield = gameObject.GetComponentInChildren<Shield>();
+    shield.player = gameObject.GetComponent<Player1>();
     localScale = gameObject.transform.localScale;
     // initialize stats
     updateClass();
@@ -201,6 +202,10 @@ public class Player1 : MonoBehaviour {
 
   void OnCollisionExit() {
     grounded = false;
+  }
+
+  public void getWood(){
+    wood += 1;
   }
 
   void die(){

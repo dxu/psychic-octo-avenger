@@ -140,15 +140,18 @@ public class Environment : MonoBehaviour {
     // check each alien, if it goes past the boundary, change all aliens directions and return
     foreach(Alien a in aliens) {
       // if going vertical, ignore
-      if(a == null || a.vertical) {
-        return;
+      if(a == null) {
+        continue;
+      }
+      if(a.vertical) {
+        break;
       }
       // if horizontal check to see if hit edge
       if((!a.right && a.transform.position.x - a.getVelocity() < tl.x) || (a.right && a.transform.position.x + a.getVelocity() > br.x)) {
         foreach(Alien b in aliens) {
           b.changeDirection();
         }
-        return;
+        break;
       }
     }
 	}

@@ -4,6 +4,7 @@ using System.Collections;
 public class Shield : MonoBehaviour {
 
   public bool activated = false;
+  public Player1 player;
 	// Use this for initialization
 	void Start () {
 	}
