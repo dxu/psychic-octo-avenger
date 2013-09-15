@@ -15,6 +15,9 @@ public class Player1 : MonoBehaviour {
   private bool builder = false;
   private int wood = 5;
 
+  private int health = 1;
+  private bool dead = false;
+
   private Vector3 speed = new Vector3(9.0f, 0, 0);// = new Vector3(3.0f, 0, 0);
   private Vector3 horizontalMovement;
   private float walkAcceleration = 6000.0f;
@@ -31,6 +34,7 @@ public class Player1 : MonoBehaviour {
   private float maxSlope = 60;
   private float jumpHeight = 15;
 
+  private Vector3 localScale;
 
   Sword sword;
   Shield shield;
@@ -41,9 +45,17 @@ public class Player1 : MonoBehaviour {
     Physics.gravity = new Vector3(0, -50, 0);
     sword = gameObject.GetComponentInChildren<Sword>();
     shield = gameObject.GetComponentInChildren<Shield>();
+    localScale = gameObject.transform.localScale;
     // initialize stats
     updateClass();
 	}
+
+  public void takeDamage(){
+    Debug.Log("TOOK DAMAGE");
+    health -= 1;
+    if(health == 0)
+      die();
+  }
 
   // changes class stats
   void updateClass(){
@@ -55,6 +67,8 @@ public class Player1 : MonoBehaviour {
     }
   }
 
+  private float deathDelay = 5.0f;
+  private float deathTimer;
   private float delay = 0.05f;
   private float swordTimer;
 	// Update is called once per frame
@@ -62,6 +76,18 @@ public class Player1 : MonoBehaviour {
     // if the delay time is up, hide
     if(Time.time > swordTimer && swordTimer != 0) {
       sword.active = false;
+    }
+    if(Time.time > deathTimer && deathTimer != 0) {
+      Debug.Log("SHOULD BE UPPPPP");
+      // gameObject.active = true;
+      dead = false;
+      health = 1;
+      gameObject.transform.localScale = localScale;
+    }
+
+    //
+    if(dead) {
+      return;
     }
 
     // keypresses
@@ -85,15 +111,19 @@ public class Player1 : MonoBehaviour {
         swordTimer = Time.time + delay;
       }
       else {
-        shield.transform.localScale = new Vector3(2,2,0);
+        shield.transform.localScale = new Vector3(2.0f,2.0f,0);
+        shield.transform.GetComponent<SphereCollider>().radius = 0.5f;
         // shield.collider.enabled = true;
+        shield.activated = true;
       }
     }
 
     // hide the shield on button up
     if(Input.GetButtonUp("Fire1-2")) {
       shield.transform.localScale = new Vector3(0,0,0);
+        shield.transform.GetComponent<SphereCollider>().radius = 0.0f;
         // shield.collider.enabled = false;
+        shield.activated = false;
     }
   }
 
@@ -101,6 +131,11 @@ public class Player1 : MonoBehaviour {
   }
 
 	void FixedUpdate () {
+    // don't do anything if dead
+    if(dead) {
+      return;
+    }
+
     // set up max speed
     horizontalMovement = new Vector3(rigidbody.velocity.x, 0, 0);
     if(horizontalMovement.magnitude > maxWalkSpeed) {
@@ -168,5 +203,12 @@ public class Player1 : MonoBehaviour {
     grounded = false;
   }
 
+  void die(){
+    // Destroy(gameObject);
+    Debug.Log("RESPAWNING");
+    gameObject.transform.localScale = new Vector3(0,0,0);
+    dead = true;
+    deathTimer = Time.time + deathDelay;
+  }
 
 }

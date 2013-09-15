@@ -27,25 +27,33 @@ public class AlienBullet : MonoBehaviour {
       die();
     }
     else if(collider.CompareTag("Alien")) {
-      // if it's been reflected, hurts aliens
       if(reflected) {
       }
     }
     else if(collider.CompareTag("Shield")) {
 
-      Vector3 avg = new Vector3(0,0,0);
-      // average over the collision's contact points is the normal
-      foreach(ContactPoint contact in collision.contacts) {
-        avg += contact.normal;
+      // reflect only if player isn't shielded
+      Shield shield = collider.GetComponent<Shield>();
+      if(shield.activated) {
+        Vector3 avg = new Vector3(0,0,0);
+        // average over the collision's contact points is the normal
+        foreach(ContactPoint contact in collision.contacts) {
+          avg += contact.normal;
+        }
+        avg /= collision.contacts.GetLength(0);
+        Debug.Log("his");
+        Debug.Log(avg);
+        direction = Vector3.Reflect(gameObject.transform.position, avg);
+        direction.Normalize();
       }
-      avg /= collision.contacts.GetLength(0);
-      Debug.Log("his");
-      Debug.Log(avg);
-      direction = Vector3.Reflect(gameObject.transform.position, avg);
-      direction.Normalize();
+      else {
+        shield.transform.parent.GetComponent<Player1>().takeDamage();
+      }
+
     }
     else if(collider.CompareTag("Player")){
-    	Debug.Log("Hit");
+      // TODO: Figure out why it never hits player when shield is down
+    	Debug.Log("Hit player. should not happen");
     }
     else {
       Debug.Log("Collided with " + collider.tag);

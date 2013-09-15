@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Shield : MonoBehaviour {
 
+  public bool activated = false;
 	// Use this for initialization
 	void Start () {
 	}
