@@ -16,13 +16,11 @@ public class AlienBullet : MonoBehaviour {
     Collider collider = collision.collider;
     // Debug.Log(collider.tag);
     if(collider.CompareTag("Ship")) {
-      Debug.Log("ship" );
       Ship player = collider.gameObject.GetComponent<Ship>();
       player.takeDamage();
       die();
     }
     else if(collider.CompareTag("Shield")) {
-      Debug.Log("should be here" );
       Shield shield = collider.gameObject.GetComponent<Shield>();
       shield.takeDamage();
       die();

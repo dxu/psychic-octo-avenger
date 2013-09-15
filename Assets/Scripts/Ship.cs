@@ -33,7 +33,6 @@ public class Ship : MonoBehaviour {
     AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
 
     if(health == 0) {
-      Debug.Log("YOU LOST THE GAME!");
       die();
     }
 

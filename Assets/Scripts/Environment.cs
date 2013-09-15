@@ -32,8 +32,6 @@ public class Environment : MonoBehaviour {
     // setup cameras
     fpcam = GameObject.Find("FPCamera").GetComponent<Camera>();
     maincam = GameObject.Find("Main Camera").GetComponent<Camera>();
-    Debug.Log(fpcam);
-    Debug.Log(Camera.main);
     fpcam.active = false;
     maincam.active = true;
 
@@ -122,7 +120,6 @@ public class Environment : MonoBehaviour {
     if(ufo != null) {
       if(ufo.transform.position.x < tl.x || ufo.transform.position.x > br.x) {
         ufo.die();
-        Debug.Log(ufo);
       }
     }
     // chance to spawn ufo

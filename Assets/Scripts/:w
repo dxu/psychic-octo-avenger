@@ -1,0 +1,56 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class Player1 : MonoBehaviour {
+
+  private Vector3 speed = new Vector3(9.0f, 0, 0);// = new Vector3(3.0f, 0, 0);
+	// Use this for initialization
+  //
+  private float maxWalkSpeed = 20;
+	void Start () {
+
+	}
+
+	// Update is called once per frame
+	void FixedUpdate () {
+    // set up max speed
+    // horizontalMovement = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y, 0);
+    horizontalMovement = new Vector3(rigidbody.velocity.x, 0, 0);
+    if(horizontalMovement.magnitude > maxWalkSpeed) {
+      horizontalMovement = horizontalMovement.normalized * maxWalkSpeed;
+    }
+    rigidbody.velocity = horizontalMovement;
+
+    rigidbody.AddRelativeForce(Inpu)
+
+    if(Input.GetAxisRaw("Horizontal") > 0) {
+      // gameObject.rigidbody.AddRelativeForce(speed);
+      // gameObject.transform.position += speed * 0.1f;
+      // rigidbody.AddForce(new Vector3(Input.GetAxis("Horizontal")*10, 0, 0));
+      // Debug.Log("moving");
+      // Debug.Log(Input.GetAxis("Horizontal"));
+      rigidbody.velocity = speed;
+    }
+    if(Input.GetAxisRaw("Horizontal") < 0) {
+      // gameObject.rigidbody.AddRelativeForce(-speed);
+      // gameObject.transform.position -= speed * 0.1f;
+      // rigidbody.AddForce(new Vector3(Input.GetAxis("Horizontal")*10, 0, 0));
+      // Debug.Log("moving");
+      // Debug.Log(Input.GetAxis("Horizontal"));
+      rigidbody.velocity = -speed;
+    }
+    // if(Input.GetButtonDown("Fire1") && reloaded) {
+    //   [> we don’t want to spawn a Bullet inside our ship, so some
+    //   Simple trigonometry is done here to spawn the bullet
+    //   at the tip of where the ship is pointed.
+    //   */
+
+    //   // get the Bullet Script Component of the new Bullet instance
+    //   Bullet b = createBullet();
+    //   // set the direction the Bullet will travel in
+    //   Quaternion rot = Quaternion.Euler(new Vector3(0,rotation,0));
+    //   b.heading = rot;
+    //   reloaded = false;
+    // }
+  }
+}
