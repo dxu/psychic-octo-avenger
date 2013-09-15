@@ -75,9 +75,9 @@ public class Player1 : MonoBehaviour {
     rigidbody.velocity = new Vector3(horizontalMovement.x, rigidbody.velocity.y, 0);
 
     if(grounded)
-      rigidbody.AddRelativeForce(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * Time.fixedDeltaTime, 0, 0));
+      rigidbody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * Time.fixedDeltaTime, 0, 0));
     else {
-      rigidbody.AddRelativeForce(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * airDragRatio * Time.fixedDeltaTime, 0, 0));
+      rigidbody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * airDragRatio * Time.fixedDeltaTime, 0, 0));
     }
 
     // Debug.Log(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * Time.fixedDeltaTime, 0, 0));
@@ -94,7 +94,7 @@ public class Player1 : MonoBehaviour {
       verticalMovement = 0;
 
       if(Input.GetButtonDown("Jump") && grounded) {
-        rigidbody.AddRelativeForce(0, jumpAcceleration, 0);
+        rigidbody.AddForce(0, jumpAcceleration, 0);
         verticalMovement = jumpHeight;
       Debug.Log("JUMPED");
       }
@@ -107,11 +107,12 @@ public class Player1 : MonoBehaviour {
       // gameObject.transform.RotateAround(gameObject.transform.position, gameObject.transform.position, 360f);
 
       Debug.Log("HOEJJ");
-     //  xrotation(gameObject.transform, new Vector3(0, 0, 360.0f), 2.0f);
+      // xrotation(gameObject.transform, new Vector3(0, 0, 360.0f), 2.0f);
+      rigidbody.AddTorque(new Vector3(0, 0, 3000.0f));
 
 
       rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
-      rigidbody.AddRelativeForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcceleration, 0);
+      rigidbody.AddForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcceleration, 0);
       doubleJump = false;
     }
     verticalMovement += Physics.gravity.y * Time.deltaTime;
@@ -145,6 +146,8 @@ public class Player1 : MonoBehaviour {
 
 
   void OnCollisionEnter(Collision collision) {
+    // right itself
+    // gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
     foreach(ContactPoint contact in collision.contacts) {
       if(Vector3.Angle(contact.normal, Vector3.up) < maxSlope){
         grounded = true;
