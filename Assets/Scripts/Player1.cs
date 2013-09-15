@@ -107,7 +107,7 @@ public class Player1 : MonoBehaviour {
       // gameObject.transform.RotateAround(gameObject.transform.position, gameObject.transform.position, 360f);
 
       Debug.Log("HOEJJ");
-      xrotation(gameObject.transform, new Vector3(0, 0, 360.0f), 2.0f);
+     //  xrotation(gameObject.transform, new Vector3(0, 0, 360.0f), 2.0f);
 
 
       rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
