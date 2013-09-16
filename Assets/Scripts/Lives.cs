@@ -14,6 +14,6 @@ public class Lives : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-    livesText.text = "Lives: " + globalObj.lives.ToString();
+    livesText.text = "Humans: " + globalObj.humanCount.ToString();
 	}
 }

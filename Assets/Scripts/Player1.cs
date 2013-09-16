@@ -13,7 +13,7 @@ public class Player1 : MonoBehaviour {
   private RaycastHit hit;
 
   private bool builder = false;
-  private int wood = 5;
+  private int wood = 10;
 
   private int health = 1;
   private bool dead = false;
@@ -81,7 +81,7 @@ public class Player1 : MonoBehaviour {
       sword.active = false;
     }
     if(Time.time > deathTimer && deathTimer != 0) {
-      Debug.Log("SHOULD BE UPPPPP");
+      Debug.Log("SHOULD BE ALIVEEE");
       // gameObject.active = true;
       dead = false;
       health = 1;
@@ -107,7 +107,6 @@ public class Player1 : MonoBehaviour {
     }
     else if((Input.GetButtonDown("Fire1-2") && id == 1) || (Input.GetButtonDown("Fire2-2") && id == 2)) {
       // grab child
-      Debug.Log("INSIDE");
       // activate sword - class behavior determind in the sword class
       if(builder){
         sword.active = true;
@@ -180,7 +179,6 @@ public class Player1 : MonoBehaviour {
         rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
         rigidbody.AddForce(0, jumpAcc, 0);
         verticalMovement = jumpHeight;
-      Debug.Log("JUMPED" + jumpAcc);
       }
     }
     else if(((Input.GetButtonDown("Jump") && id == 1) || (Input.GetButtonDown("Jump-2") && id == 2)) && doubleJump){
@@ -196,7 +194,6 @@ public class Player1 : MonoBehaviour {
 
 
   void OnCollisionEnter(Collision collision) {
-    Debug.Log("collision entered");
     // right itself
     grounded = true;
     doubleJump = true;
@@ -212,12 +209,21 @@ public class Player1 : MonoBehaviour {
       builder = false;
       updateClass();
     }
+    else if(collider.CompareTag("Alien")) {
+      // if shielded
+      if(shield.activated){
+        Alien alien = collider.GetComponent<Alien>();
+        alien.die();
+      }
+      else {
+        takeDamage();
+      }
+    }
     // if it's the builderspawn
 
   }
 
   void OnCollisionExit() {
-    Debug.Log("grounded exited");
     grounded = false;
   }
 

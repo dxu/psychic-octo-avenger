@@ -28,6 +28,10 @@ public class Human : MonoBehaviour {
 
   private void die(){
     Destroy(gameObject);
+    // update environment
+    GameObject g = GameObject.Find("Environment");
+    Environment globalObj = g.GetComponent<Environment>();
+    globalObj.humanCount -= 1;
   }
 
   public void takeDamage() {

@@ -8,6 +8,7 @@ public class Environment : MonoBehaviour {
   private Alien[,] aliens;
   private Platform[] platforms;
   private Human[] humans;
+  public int humanCount = 20;
   private int platformCount = 4;
   private Ship ship;
   private Vector3 br;
@@ -41,7 +42,7 @@ public class Environment : MonoBehaviour {
     br = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,0,originScreen.z));
     tl = Camera.main.ScreenToWorldPoint(new Vector3(0,Screen.height,originScreen.z));
 
-    humans  = new Human[20];
+    humans  = new Human[humanCount];
 
     aliens  = new Alien[rows, cols];
     platforms  = new Platform[platformCount];
@@ -52,9 +53,9 @@ public class Environment : MonoBehaviour {
     groundStart.x = 0;
     groundStart.z = 0;
     // generate ground
-    ground = Instantiate(Resources.Load("Prefabs/GroundPrefab"),
+    ground = (Instantiate(Resources.Load("Prefabs/GroundPrefab"),
         groundStart,
-        Quaternion.identity) as Ground;
+        Quaternion.identity) as GameObject).GetComponent<Ground>();
     // generate player 1 and 2
     player1 = (Instantiate(Resources.Load("Prefabs/Player1Prefab"),
         groundStart - new Vector3(5, -3, 0),
@@ -63,20 +64,21 @@ public class Environment : MonoBehaviour {
         groundStart + new Vector3(5.0f, 3.0f, 0.0f),
         Quaternion.identity) as GameObject).GetComponent<Player1>();
     player2.id = 2;
+
     // Debug.Log(player2);
     // Debug.Log(player2.GetComponent<Player1>());
     // generate the builder and fighter spawns
-    builderSpawn = Instantiate(Resources.Load("Prefabs/BuilderSpawnPrefab"),
+    builderSpawn = (Instantiate(Resources.Load("Prefabs/BuilderSpawnPrefab"),
         new Vector3(tl.x + 1.5f, groundStart.y + 3.0f, 0),
-        Quaternion.identity) as BuilderSpawn;
-    fighterSpawn = Instantiate(Resources.Load("Prefabs/FighterSpawnPrefab"),
+        Quaternion.identity) as GameObject).GetComponent<BuilderSpawn>();
+    fighterSpawn = (Instantiate(Resources.Load("Prefabs/FighterSpawnPrefab"),
         new Vector3(br.x - 1.5f, groundStart.y + 3.0f, 0),
-        Quaternion.identity) as FighterSpawn;
+        Quaternion.identity) as GameObject).GetComponent<FighterSpawn>();
     // generate 20 humans
     for(int i=0; i<humans.GetLength(0); i++) {
-      humans[i] = Instantiate(Resources.Load("Prefabs/HumanPrefab"),
+      humans[i] = (Instantiate(Resources.Load("Prefabs/HumanPrefab"),
         new Vector3(Random.Range(br.x - 2.0f,tl.x + 2.0f) , groundStart.y + 3.0f, 0),
-        Quaternion.identity) as Human;
+        Quaternion.identity) as GameObject).GetComponent<Human>();
     }
 
 

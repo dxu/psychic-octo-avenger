@@ -54,6 +54,7 @@ public class AlienBullet : MonoBehaviour {
       }
       else {
         shield.transform.parent.GetComponent<Player1>().takeDamage();
+        die();
       }
     }
     else if(collider.CompareTag("Player")){
@@ -78,6 +79,7 @@ public class AlienBullet : MonoBehaviour {
       }
       else {
         shield.transform.parent.GetComponent<Player1>().takeDamage();
+        die();
       }
     }
     else if(collider.CompareTag("Human")){
