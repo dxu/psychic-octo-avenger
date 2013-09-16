@@ -17,6 +17,7 @@ public class Player1 : MonoBehaviour {
 
   private int health = 1;
   private bool dead = false;
+  public int id = 1;
 
   private Vector3 speed = new Vector3(9.0f, 0, 0);// = new Vector3(3.0f, 0, 0);
   private Vector3 horizontalMovement;
@@ -93,7 +94,7 @@ public class Player1 : MonoBehaviour {
     }
 
     // keypresses
-    if(Input.GetButtonDown("Fire1")) {
+    if((Input.GetButtonDown("Fire1") && id == 1) || (Input.GetButtonDown("Fire2") && id == 2)) {
       if(builder) {
         if(wood > 0) {
           // generate a shield
@@ -104,7 +105,7 @@ public class Player1 : MonoBehaviour {
         }
       }
     }
-    else if(Input.GetButtonDown("Fire1-2")) {
+    else if((Input.GetButtonDown("Fire1-2") && id == 1) || (Input.GetButtonDown("Fire2-2") && id == 2)) {
       // grab child
       Debug.Log("INSIDE");
       // activate sword - class behavior determind in the sword class
@@ -121,7 +122,7 @@ public class Player1 : MonoBehaviour {
     }
 
     // hide the shield on button up
-    if(Input.GetButtonUp("Fire1-2")) {
+    if((Input.GetButtonUp("Fire1-2") && id == 1) || (Input.GetButtonUp("Fire2-2") && id == 2)) {
       shield.transform.localScale = new Vector3(0,0,0);
         shield.transform.GetComponent<SphereCollider>().radius = 0.0f;
         // shield.collider.enabled = false;
@@ -146,11 +147,23 @@ public class Player1 : MonoBehaviour {
     // retain y velocity
     rigidbody.velocity = new Vector3(horizontalMovement.x, rigidbody.velocity.y, 0);
 
-    if(grounded)
-      rigidbody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * Time.fixedDeltaTime, 0, 0));
-    else {
-      rigidbody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * airDragRatio * Time.fixedDeltaTime, 0, 0));
+    if(grounded) {
+      if(id == 1) {
+        rigidbody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * Time.fixedDeltaTime, 0, 0));
+      }
+      else if (id == 2) {
+        rigidbody.AddForce(new Vector3(Input.GetAxis("Horizontal-2")*walkAcceleration * Time.fixedDeltaTime, 0, 0));
+      }
     }
+    else {
+      if(id == 1) {
+        rigidbody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal")*walkAcceleration * airDragRatio * Time.fixedDeltaTime, 0, 0));
+      }
+      else if(id == 2) {
+        rigidbody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal-2")*walkAcceleration * airDragRatio * Time.fixedDeltaTime, 0, 0));
+      }
+    }
+
 
     // slow down
     if(grounded) {
@@ -161,7 +174,8 @@ public class Player1 : MonoBehaviour {
     if(grounded) {
       verticalMovement = 0;
 
-      if(Input.GetButtonDown("Jump") && grounded) {
+      if(((Input.GetButtonDown("Jump") && id == 1) ||
+            (Input.GetButtonDown("Jump-2") && id == 2)) && grounded ) {
         // reset vertical velocity to get full jump height
         rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
         rigidbody.AddForce(0, jumpAcc, 0);
@@ -169,7 +183,7 @@ public class Player1 : MonoBehaviour {
       Debug.Log("JUMPED" + jumpAcc);
       }
     }
-    else if(Input.GetButtonDown("Jump") && doubleJump){
+    else if(((Input.GetButtonDown("Jump") && id == 1) || (Input.GetButtonDown("Jump-2") && id == 2)) && doubleJump){
       rigidbody.AddTorque(new Vector3(0, 0, 3000.0f));
       rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
       rigidbody.AddForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcc, 0);

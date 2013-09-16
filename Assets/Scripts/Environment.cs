@@ -21,6 +21,7 @@ public class Environment : MonoBehaviour {
   private int groundHeight = 20; // the height of the ground in screen pixels
   private Ground ground;
   private Player1 player1;
+  private Player1 player2;
   private BuilderSpawn builderSpawn;
   private FighterSpawn fighterSpawn;
   public Camera fpcam;
@@ -55,9 +56,15 @@ public class Environment : MonoBehaviour {
         groundStart,
         Quaternion.identity) as Ground;
     // generate player 1 and 2
-    player1 = Instantiate(Resources.Load("Prefabs/Player1Prefab"),
+    player1 = (Instantiate(Resources.Load("Prefabs/Player1Prefab"),
         groundStart - new Vector3(5, -3, 0),
-        Quaternion.identity) as Player1;
+        Quaternion.identity) as GameObject).GetComponent<Player1>();
+    player2 = (Instantiate(Resources.Load("Prefabs/Player1Prefab"),
+        groundStart + new Vector3(5.0f, 3.0f, 0.0f),
+        Quaternion.identity) as GameObject).GetComponent<Player1>();
+    player2.id = 2;
+    // Debug.Log(player2);
+    // Debug.Log(player2.GetComponent<Player1>());
     // generate the builder and fighter spawns
     builderSpawn = Instantiate(Resources.Load("Prefabs/BuilderSpawnPrefab"),
         new Vector3(tl.x + 1.5f, groundStart.y + 3.0f, 0),
@@ -115,7 +122,7 @@ public class Environment : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
     // camera logic
-    if(Input.GetButtonDown("Fire2")) {
+    if(Input.GetButtonDown("Camera")) {
       // switch camera
       fpcam.active = !fpcam.active;
       maincam.active = !maincam.active;

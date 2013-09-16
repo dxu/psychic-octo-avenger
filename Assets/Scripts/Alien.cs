@@ -47,9 +47,9 @@ public class Alien : MonoBehaviour {
 	}
   // called when direction is outside of camera
   public void changeDirection() {
-    vertical = true;
+    // vertical = true;
     right = !right;
-    timer = Time.time + delay;
+    // timer = Time.time + delay;
 
   }
 
