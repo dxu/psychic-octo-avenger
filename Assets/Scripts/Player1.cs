@@ -37,12 +37,13 @@ public class Player1 : MonoBehaviour {
   private Vector3 localScale;
 
   Sword sword;
-  Shield shield;
+  public Shield shield;
+
 	void Start () {
     collider = GetComponent<BoxCollider>();
     size = collider.size;
     center = collider.center;
-    Physics.gravity = new Vector3(0, -50, 0);
+    Physics.gravity = new Vector3(0, -50.0f, 0);
     sword = gameObject.GetComponentInChildren<Sword>();
     shield = gameObject.GetComponentInChildren<Shield>();
     shield.player = gameObject.GetComponent<Player1>();
@@ -181,6 +182,7 @@ public class Player1 : MonoBehaviour {
 
 
   void OnCollisionEnter(Collision collision) {
+    Debug.Log("collision entered");
     // right itself
     grounded = true;
     doubleJump = true;
@@ -201,6 +203,7 @@ public class Player1 : MonoBehaviour {
   }
 
   void OnCollisionExit() {
+    Debug.Log("grounded exited");
     grounded = false;
   }
 

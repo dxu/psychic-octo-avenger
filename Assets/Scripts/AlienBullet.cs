@@ -55,11 +55,30 @@ public class AlienBullet : MonoBehaviour {
       else {
         shield.transform.parent.GetComponent<Player1>().takeDamage();
       }
-
     }
     else if(collider.CompareTag("Player")){
       // TODO: Figure out why it never hits player when shield is down
     	Debug.Log("Hit player. should not happen");
+
+      Shield shield = collider.GetComponent<Player1>().shield;
+      if(shield.activated) {
+        reflected = true;
+        Vector3 avg = new Vector3(0,0,0);
+        // average over the collision's contact points is the normal
+        foreach(ContactPoint contact in collision.contacts) {
+          avg += contact.normal;
+        }
+        avg /= collision.contacts.GetLength(0);
+        Debug.Log("his");
+        Debug.Log(avg);
+        direction = Vector3.Reflect(gameObject.transform.position, avg);
+        direction.Normalize();
+        direction += rigidbody.velocity;
+        // TODO: add to the direction vector of the player
+      }
+      else {
+        shield.transform.parent.GetComponent<Player1>().takeDamage();
+      }
     }
     else if(collider.CompareTag("Human")){
       Human human = collider.gameObject.GetComponent<Human>();
