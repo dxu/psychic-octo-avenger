@@ -13,7 +13,7 @@ public class Player1 : MonoBehaviour {
   private RaycastHit hit;
 
   private bool builder = false;
-  private int wood = 10;
+  public int wood = 10;
 
   private int health = 1;
   private bool dead = false;
@@ -39,6 +39,7 @@ public class Player1 : MonoBehaviour {
 
   Sword sword;
   public Shield shield;
+
 
 	void Start () {
     collider = GetComponent<BoxCollider>();
@@ -74,8 +75,24 @@ public class Player1 : MonoBehaviour {
   private float deathTimer;
   private float delay = 0.05f;
   private float swordTimer;
+
+  private float shieldDelay = 0.01f;
+  private float shieldTimer = Time.time;
 	// Update is called once per frame
   void Update() {
+
+    // if the delay time is up, hide
+    if(Time.time > shieldTimer) {
+      // requires a little bit of buffer so you can't just spam it
+      if(shield.activated){
+        shield.life -= 1.0f;
+      }
+      else {
+        shield.life += 0.3f;
+      }
+      shieldTimer = Time.time + shieldDelay;
+    }
+
     // if the delay time is up, hide
     if(Time.time > swordTimer && swordTimer != 0) {
       sword.active = false;
@@ -112,21 +129,34 @@ public class Player1 : MonoBehaviour {
         sword.active = true;
         swordTimer = Time.time + delay;
       }
-      else {
-        shield.transform.localScale = new Vector3(2.0f,2.0f,0);
-        shield.transform.GetComponent<SphereCollider>().radius = 0.5f;
-        // shield.collider.enabled = true;
-        shield.activated = true;
+      else if(shield.life > 20 && !shield.activated){
+        activateShield();
+      }
+      else if(shield.activated) {
+        deactivateShield();
       }
     }
 
     // hide the shield on button up
     if((Input.GetButtonUp("Fire1-2") && id == 1) || (Input.GetButtonUp("Fire2-2") && id == 2)) {
-      shield.transform.localScale = new Vector3(0,0,0);
-        shield.transform.GetComponent<SphereCollider>().radius = 0.0f;
-        // shield.collider.enabled = false;
-        shield.activated = false;
+      deactivateShield();
     }
+  }
+
+  void activateShield(){
+    shield.transform.localScale = new Vector3(2.0f,2.0f,0);
+    shield.transform.GetComponent<SphereCollider>().radius = 0.5f;
+    // shield.collider.enabled = true;
+    shield.activated = true;
+    // requires 20 so you can't just spam it
+    shield.life -= 20.0f;
+  }
+
+  void deactivateShield(){
+    shield.transform.localScale = new Vector3(0,0,0);
+    shield.transform.GetComponent<SphereCollider>().radius = 0.0f;
+    // shield.collider.enabled = false;
+    shield.activated = false;
   }
 
   void moveVertical(float distance) {

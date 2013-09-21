@@ -21,8 +21,8 @@ public class Environment : MonoBehaviour {
   Vector3 groundStart; // start of aliens
   private int groundHeight = 20; // the height of the ground in screen pixels
   private Ground ground;
-  private Player1 player1;
-  private Player1 player2;
+  public Player1 player1;
+  public Player1 player2;
   private BuilderSpawn builderSpawn;
   private FighterSpawn fighterSpawn;
   public Camera fpcam;
