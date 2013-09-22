@@ -33,6 +33,13 @@ public class AlienBullet : MonoBehaviour {
         die();
       }
     }
+    else if(collider.CompareTag("UFO")) {
+      if(reflected) {
+        UFO ufo = collider.gameObject.GetComponent<UFO>();
+        ufo.die();
+        die();
+      }
+    }
     else if(collider.CompareTag("Shield")) {
 
       // reflect only if player isn't shielded

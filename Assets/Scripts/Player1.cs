@@ -15,7 +15,7 @@ public class Player1 : MonoBehaviour {
   public Material BuilderMaterial;
   public Material FighterMaterial;
 
-  private bool builder = false;
+  private bool builder;
   public int wood = 13;
 
   private int health = 1;
@@ -39,6 +39,7 @@ public class Player1 : MonoBehaviour {
   private bool doubleJump;
   private float maxSlope = 60;
   private float jumpHeight = 15;
+  private Vector3 spawn;
 
   private Vector3 localScale;
 
@@ -47,6 +48,10 @@ public class Player1 : MonoBehaviour {
 
 
 	void Start () {
+    if(id == 1)
+      builder = false;
+    else
+      builder = true;
     collider = GetComponent<BoxCollider>();
     size = collider.size;
     center = collider.center;
@@ -57,6 +62,7 @@ public class Player1 : MonoBehaviour {
     localScale = gameObject.transform.localScale;
     // initialize stats
     updateClass();
+    spawn = gameObject.transform.position;
 	}
 
   public void takeDamage(){
@@ -108,12 +114,16 @@ public class Player1 : MonoBehaviour {
     if(Time.time > swordTimer && swordTimer != 0) {
       sword.active = false;
     }
-    if(Time.time > deathTimer && deathTimer != 0) {
+    if(Time.time > deathTimer && deathTimer != 0 && dead) {
       Debug.Log("SHOULD BE ALIVEEE");
       // gameObject.active = true;
       dead = false;
       health = 1;
       gameObject.transform.localScale = localScale;
+      // grab ground
+      gameObject.transform.position = new Vector3(spawn.x, spawn.y + 1.0f, 0);
+      gameObject.rigidbody.velocity = new Vector3(0, 0, 0);
+
       deathDisplayTime = "";
     } else if(deathTimer != 0 && dead){
       // if not in the beginning, but is dead
@@ -231,8 +241,8 @@ public class Player1 : MonoBehaviour {
       rigidbody.AddTorque(new Vector3(0, 0, 3000.0f));
       rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
       rigidbody.AddForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcc, 0);
-      // if(!builder)
-      doubleJump = false;
+      if(builder)
+        doubleJump = false;
     }
     verticalMovement += Physics.gravity.y * Time.deltaTime;
     moveVertical(verticalMovement * Time.deltaTime);

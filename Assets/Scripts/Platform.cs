@@ -3,7 +3,9 @@ using System.Collections;
 
 public class Platform : MonoBehaviour {
 
-  private int health = 300;
+  private int health = 3;
+  public Material two;
+  public Material one;
 	// Use this for initialization
 	void Start () {
 
@@ -11,7 +13,11 @@ public class Platform : MonoBehaviour {
 
   public void takeDamage() {
     health -= 1;
-    if(health == 0) {
+    if(health == 2)
+      gameObject.renderer.material = two;
+    else if(health == 1)
+      gameObject.renderer.material = one;
+    else if(health == 0) {
       die();
     }
   }

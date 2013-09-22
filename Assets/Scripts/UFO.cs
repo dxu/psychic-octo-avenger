@@ -34,4 +34,9 @@ public class UFO : MonoBehaviour {
     gameObject.rigidbody.velocity = new Vector3(0,0,0);
     moving = false;
   }
+
+  void OnCollisionEnter(Collision collision) {
+
+  }
+
 }

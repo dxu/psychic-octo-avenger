@@ -45,6 +45,8 @@ public class Human : MonoBehaviour {
     globalObj.humanCount -= 1;
     floating = false;
     Destroy(gameObject);
+    if(globalObj.humanCount == 0)
+      Application.LoadLevel("GameOverScene");
   }
 
   public void takeDamage() {
