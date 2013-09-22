@@ -13,9 +13,9 @@ public class Player1 : MonoBehaviour {
   private RaycastHit hit;
 
   private bool builder = false;
-  public int wood = 100;
+  public int wood = 13;
 
-  private int health = 100;
+  private int health = 1;
   private bool dead = false;
 
 
