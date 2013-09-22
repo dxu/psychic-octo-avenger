@@ -8,6 +8,7 @@ public class Human : MonoBehaviour {
   private float vert_speed = 0.1f;
   private int health = 1;
   public bool floating = false;
+  AudioClip floatSound;
 	// Use this for initialization
 	void Start () {
     // random start direction
@@ -35,12 +36,15 @@ public class Human : MonoBehaviour {
 	}
 
   private void die(){
-    Destroy(gameObject);
+
+    AudioClip scream =  (AudioClip)Resources.Load("Audio/scream");
+    AudioSource.PlayClipAtPoint(scream, gameObject.transform.position);
     // update environment
     GameObject g = GameObject.Find("Environment");
     Environment globalObj = g.GetComponent<Environment>();
     globalObj.humanCount -= 1;
     floating = false;
+    Destroy(gameObject);
   }
 
   public void takeDamage() {
@@ -50,7 +54,11 @@ public class Human : MonoBehaviour {
   }
 
   public void floatUp() {
-    floating = true;
+    if(!floating) {
+      floating = true;
+      floatSound =  (AudioClip)Resources.Load("Audio/ufo_lowpitch");
+      AudioSource.PlayClipAtPoint(floatSound, gameObject.transform.position);
+    }
   }
 
   public void floatDown() {

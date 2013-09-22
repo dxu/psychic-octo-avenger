@@ -28,12 +28,14 @@ public class Environment : MonoBehaviour {
   public Camera fpcam;
   public Camera maincam;
 
+
+
 	// Use this for initialization
 	void Start () {
 
     // setup cameras
-    fpcam = GameObject.Find("FPCamera").GetComponent<Camera>();
     maincam = GameObject.Find("Main Camera").GetComponent<Camera>();
+    fpcam = GameObject.Find("3dcam").GetComponent<Camera>();
     fpcam.active = false;
     maincam.active = true;
 
@@ -113,7 +115,7 @@ public class Environment : MonoBehaviour {
     ufo = (Instantiate(Resources.Load("Prefabs/UFOPrefab"),
             new Vector3(Random.Range(tl.x, br.x), tl.y - 1, alienStart.z),
             Quaternion.identity) as GameObject).GetComponent<UFO>();
-    AudioClip fireSound = (AudioClip)Resources.Load("Audio/ufo_lowpitch");
+    AudioClip fireSound = (AudioClip)Resources.Load("Audio/ufo_highpitch");
     AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
   }
 
@@ -164,6 +166,7 @@ public class Environment : MonoBehaviour {
           if(humans[i] != null) {
             if(humans[i].transform.position.x <= ufo.transform.position.x + 0.5f &&
                humans[i].transform.position.x >= ufo.transform.position.x - 0.5f) {
+
               humans[i].floatUp();
               ufo.stop();
             }

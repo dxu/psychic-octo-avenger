@@ -12,6 +12,9 @@ public class Player1 : MonoBehaviour {
   private Ray ray;
   private RaycastHit hit;
 
+  public Material BuilderMaterial;
+  public Material FighterMaterial;
+
   private bool builder = false;
   public int wood = 13;
 
@@ -26,8 +29,8 @@ public class Player1 : MonoBehaviour {
   private float walkAcceleration = 6000.0f;
   private float walkDeAcc = 0.2f;
   private float walkDeAccVolx;
-  private float builderJumpAcc = 1000.0f;
-  private float fighterJumpAcc = 850.0f;
+  private float builderJumpAcc = 1400.0f;
+  private float fighterJumpAcc = 1050.0f;
   private float jumpAcc;
   private float airDragRatio = 0.3f;
 	// Use this for initialization
@@ -84,6 +87,11 @@ public class Player1 : MonoBehaviour {
 	// Update is called once per frame
   void Update() {
 
+    if(builder == true){
+      gameObject.renderer.material = BuilderMaterial;
+    }
+    else
+      gameObject.renderer.material = FighterMaterial;
     // if the delay time is up, hide
     if(Time.time > shieldTimer) {
       // requires a little bit of buffer so you can't just spam it
@@ -223,8 +231,8 @@ public class Player1 : MonoBehaviour {
       rigidbody.AddTorque(new Vector3(0, 0, 3000.0f));
       rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
       rigidbody.AddForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcc, 0);
-      if(!builder)
-        doubleJump = false;
+      // if(!builder)
+      doubleJump = false;
     }
     verticalMovement += Physics.gravity.y * Time.deltaTime;
     moveVertical(verticalMovement * Time.deltaTime);
@@ -242,10 +250,12 @@ public class Player1 : MonoBehaviour {
     if(collider.CompareTag("BuilderSpawn")) {
       Debug.Log("Now a buidler");
       builder = true;
+      gameObject.renderer.material = BuilderMaterial;
       updateClass();
     }
     else if(collider.CompareTag("FighterSpawn")) {
       Debug.Log("Now a gfighter");
+      gameObject.renderer.material = FighterMaterial;
       builder = false;
       updateClass();
     }
@@ -284,6 +294,8 @@ public class Player1 : MonoBehaviour {
   void die(){
     // Destroy(gameObject);
     Debug.Log("RESPAWNING");
+    AudioClip fireSound = (AudioClip)Resources.Load("Audio/explosion");
+    AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
     gameObject.transform.localScale = new Vector3(0,0,0);
     dead = true;
     deathTimer = Time.time + deathDelay;
