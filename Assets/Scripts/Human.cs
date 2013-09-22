@@ -64,5 +64,10 @@ public class Human : MonoBehaviour {
       ufo.rigidbody.velocity = new Vector3(0,0,0);
       die();
     }
+    if(collider.CompareTag("Alien")) {
+      Alien alien = collider.gameObject.GetComponent<Alien>();
+      // alien.rigidbody.velocity = new Vector3(0,0,0);
+      die();
+    }
   }
 }

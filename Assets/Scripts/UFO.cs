@@ -23,7 +23,11 @@ public class UFO : MonoBehaviour {
     Destroy(gameObject);
   }
   public void start(){
-    gameObject.rigidbody.AddRelativeForce(thrust);
+    // go right
+    if(Random.Range(0,1) < 0.5)
+      gameObject.rigidbody.AddRelativeForce(thrust);
+    else
+      gameObject.rigidbody.AddRelativeForce(-thrust);
     moving = true;
   }
   public void stop() {

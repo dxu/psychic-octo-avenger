@@ -111,7 +111,7 @@ public class Environment : MonoBehaviour {
   void spawnUFO() {
     // generate ufo
     ufo = (Instantiate(Resources.Load("Prefabs/UFOPrefab"),
-            new Vector3(tl.x, tl.y - 1, alienStart.z),
+            new Vector3(Random.Range(tl.x, br.x), tl.y - 1, alienStart.z),
             Quaternion.identity) as GameObject).GetComponent<UFO>();
     AudioClip fireSound = (AudioClip)Resources.Load("Audio/ufo_lowpitch");
     AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
@@ -162,8 +162,8 @@ public class Environment : MonoBehaviour {
       else {
         for(int i=0; i <humans.GetLength(0); i++) {
           if(humans[i] != null) {
-            if(humans[i].transform.position.x <= ufo.transform.position.x + ufo.renderer.bounds.size.x/2 &&
-               humans[i].transform.position.x >= ufo.transform.position.x - ufo.renderer.bounds.size.x/2) {
+            if(humans[i].transform.position.x <= ufo.transform.position.x + 0.5f &&
+               humans[i].transform.position.x >= ufo.transform.position.x - 0.5f) {
               humans[i].floatUp();
               ufo.stop();
             }
