@@ -49,8 +49,9 @@ public class AlienBullet : MonoBehaviour {
         Debug.Log(avg);
         direction = Vector3.Reflect(gameObject.transform.position, avg);
         direction.Normalize();
-        direction += rigidbody.velocity;
+        direction += shield.rigidbody.velocity;
         // TODO: add to the direction vector of the player
+
       }
       else {
         shield.transform.parent.GetComponent<Player1>().takeDamage();

@@ -5,7 +5,9 @@ public class Human : MonoBehaviour {
 
   private bool direction; // true right, false left
   private float speed;
+  private float vert_speed = 0.1f;
   private int health = 1;
+  public bool floating = false;
 	// Use this for initialization
 	void Start () {
     // random start direction
@@ -22,8 +24,14 @@ public class Human : MonoBehaviour {
       // flip direction
       direction = !direction;
     }
-    gameObject.transform.position += new Vector3((direction ?speed : -speed), 0, 0);
-
+    if(!floating) {
+      gameObject.transform.position += new Vector3((direction ?speed : -speed), 0, 0);
+    }
+    else {
+      gameObject.rigidbody.velocity = new Vector3(0, gameObject.rigidbody.velocity.y, 0);
+      // gameObject.transform.position += new Vector3(0, vert_speed, 0);
+      gameObject.rigidbody.AddForce(new Vector3(0, 420f, 0));
+    }
 	}
 
   private void die(){
@@ -32,11 +40,29 @@ public class Human : MonoBehaviour {
     GameObject g = GameObject.Find("Environment");
     Environment globalObj = g.GetComponent<Environment>();
     globalObj.humanCount -= 1;
+    floating = false;
   }
 
   public void takeDamage() {
     health -= 1;
     if(health == 0)
       die();
+  }
+
+  public void floatUp() {
+    floating = true;
+  }
+
+  public void floatDown() {
+    floating = false;
+  }
+
+  void OnCollisionEnter(Collision collision) {
+    Collider collider = collision.collider;
+    if(collider.CompareTag("UFO")) {
+      UFO ufo = collider.gameObject.GetComponent<UFO>();
+      ufo.rigidbody.velocity = new Vector3(0,0,0);
+      die();
+    }
   }
 }

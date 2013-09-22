@@ -65,8 +65,6 @@ public class Environment : MonoBehaviour {
         Quaternion.identity) as GameObject).GetComponent<Player1>();
     player2.id = 2;
 
-    // Debug.Log(player2);
-    // Debug.Log(player2.GetComponent<Player1>());
     // generate the builder and fighter spawns
     builderSpawn = (Instantiate(Resources.Load("Prefabs/BuilderSpawnPrefab"),
         new Vector3(tl.x + 1.5f, groundStart.y + 3.0f, 0),
@@ -122,7 +120,31 @@ public class Environment : MonoBehaviour {
   private bool right = true;
   private bool vertical = false;
 	// Update is called once per frame
+
+  public void freeHumans(){
+    for(int i=0; i<humans.GetLength(0);i++) {
+      humans[i].floatDown();
+    }
+  }
+
+  public void checkHumans(){
+    if(ufo == null)
+      return;
+    // if already moving, ignore
+    if(ufo.moving)
+      return;
+    bool move = true;
+    // if any human is floating, don't start it up
+    Debug.Log("CHECKING");
+    for(int i=0; i<humans.GetLength(0);i++) {
+      if(humans[i].floating == true)
+        return;
+    }
+    ufo.start();
+  }
+
 	void Update () {
+    checkHumans();
     // camera logic
     if(Input.GetButtonDown("Camera")) {
       // switch camera
@@ -135,6 +157,18 @@ public class Environment : MonoBehaviour {
     if(ufo != null) {
       if(ufo.transform.position.x < tl.x || ufo.transform.position.x > br.x) {
         ufo.die();
+      }
+      // check, for each human, if it is within the bounds of the ufo's position,
+      else {
+        for(int i=0; i <humans.GetLength(0); i++) {
+          if(humans[i] != null) {
+            if(humans[i].transform.position.x <= ufo.transform.position.x + ufo.renderer.bounds.size.x/2 &&
+               humans[i].transform.position.x >= ufo.transform.position.x - ufo.renderer.bounds.size.x/2) {
+              humans[i].floatUp();
+              ufo.stop();
+            }
+          }
+        }
       }
     }
     // chance to spawn ufo

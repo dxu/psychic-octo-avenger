@@ -13,10 +13,12 @@ public class Player1 : MonoBehaviour {
   private RaycastHit hit;
 
   private bool builder = false;
-  public int wood = 10;
+  public int wood = 100;
 
-  private int health = 1;
+  private int health = 100;
   private bool dead = false;
+
+
   public int id = 1;
 
   private Vector3 speed = new Vector3(9.0f, 0, 0);// = new Vector3(3.0f, 0, 0);
@@ -73,6 +75,7 @@ public class Player1 : MonoBehaviour {
 
   private float deathDelay = 5.0f;
   private float deathTimer;
+  public string deathDisplayTime = "";
   private float delay = 0.05f;
   private float swordTimer;
 
@@ -103,6 +106,11 @@ public class Player1 : MonoBehaviour {
       dead = false;
       health = 1;
       gameObject.transform.localScale = localScale;
+      deathDisplayTime = "";
+    } else if(deathTimer != 0 && dead){
+      // if not in the beginning, but is dead
+      deathDisplayTime = (Mathf.Round((deathTimer - Time.time) * 100f) / 100f).ToString();
+
     }
 
     //
@@ -215,20 +223,22 @@ public class Player1 : MonoBehaviour {
       rigidbody.AddTorque(new Vector3(0, 0, 3000.0f));
       rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
       rigidbody.AddForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcc, 0);
-      doubleJump = false;
+      if(!builder)
+        doubleJump = false;
     }
     verticalMovement += Physics.gravity.y * Time.deltaTime;
     moveVertical(verticalMovement * Time.deltaTime);
-
   }
 
 
   void OnCollisionEnter(Collision collision) {
-    // right itself
-    grounded = true;
-    doubleJump = true;
-
     Collider collider = collision.collider;
+    // right itself
+    if(!collider.CompareTag("Alien")) {
+      grounded = true;
+      doubleJump = true;
+    }
+
     if(collider.CompareTag("BuilderSpawn")) {
       Debug.Log("Now a buidler");
       builder = true;
@@ -244,6 +254,16 @@ public class Player1 : MonoBehaviour {
       if(shield.activated){
         Alien alien = collider.GetComponent<Alien>();
         alien.die();
+      }
+      else {
+        takeDamage();
+      }
+    }
+    else if(collider.CompareTag("UFO")) {
+      // if shielded
+      if(shield.activated){
+        UFO ufo = collider.GetComponent<UFO>();
+        ufo.die();
       }
       else {
         takeDamage();
