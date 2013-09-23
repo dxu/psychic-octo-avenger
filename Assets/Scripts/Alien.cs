@@ -25,7 +25,7 @@ public class Alien : MonoBehaviour {
   }
 
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
     // if the delay time is up
     if(Time.time > timer && timer != 0) {

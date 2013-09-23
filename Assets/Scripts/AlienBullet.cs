@@ -123,7 +123,7 @@ public class AlienBullet : MonoBehaviour {
   // }
 
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
     gameObject.transform.position += speed * direction;
 
 	}

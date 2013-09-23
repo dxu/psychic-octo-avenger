@@ -17,7 +17,7 @@ public class Human : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
     speed = Random.Range(0, 0.1f);
     // random movement
     float r = Random.Range(0, 1.0f);
@@ -31,7 +31,7 @@ public class Human : MonoBehaviour {
     else {
       gameObject.rigidbody.velocity = new Vector3(0, gameObject.rigidbody.velocity.y, 0);
       // gameObject.transform.position += new Vector3(0, vert_speed, 0);
-      gameObject.rigidbody.AddForce(new Vector3(0, 430f, 0));
+      gameObject.rigidbody.AddForce(new Vector3(0, 505f, 0));
     }
 	}
 

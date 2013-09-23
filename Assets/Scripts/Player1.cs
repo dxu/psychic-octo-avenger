@@ -146,6 +146,33 @@ public class Player1 : MonoBehaviour {
       return;
     }
 
+  }
+
+  void activateShield(){
+    shield.transform.localScale = new Vector3(2.0f,2.0f,0);
+    shield.transform.GetComponent<SphereCollider>().radius = 0.5f;
+    // shield.collider.enabled = true;
+    shield.activated = true;
+    // requires 20 so you can't just spam it
+    shield.life -= 10.0f;
+  }
+
+  void deactivateShield(){
+    shield.transform.localScale = new Vector3(0,0,0);
+    shield.transform.GetComponent<SphereCollider>().radius = 0.0f;
+    // shield.collider.enabled = false;
+    shield.activated = false;
+  }
+
+  void moveVertical(float distance) {
+  }
+
+	void FixedUpdate () {
+    // don't do anything if dead
+    if(dead) {
+      return;
+    }
+
     // keypresses
     if((Input.GetButtonDown("Fire1") && id == 1) || (Input.GetButtonDown("Fire2") && id == 2)) {
       if(builder) {
@@ -177,32 +204,6 @@ public class Player1 : MonoBehaviour {
     // hide the shield on button up
     if((Input.GetButtonUp("Fire1-2") && id == 1) || (Input.GetButtonUp("Fire2-2") && id == 2)) {
       deactivateShield();
-    }
-  }
-
-  void activateShield(){
-    shield.transform.localScale = new Vector3(2.0f,2.0f,0);
-    shield.transform.GetComponent<SphereCollider>().radius = 0.5f;
-    // shield.collider.enabled = true;
-    shield.activated = true;
-    // requires 20 so you can't just spam it
-    shield.life -= 10.0f;
-  }
-
-  void deactivateShield(){
-    shield.transform.localScale = new Vector3(0,0,0);
-    shield.transform.GetComponent<SphereCollider>().radius = 0.0f;
-    // shield.collider.enabled = false;
-    shield.activated = false;
-  }
-
-  void moveVertical(float distance) {
-  }
-
-	void FixedUpdate () {
-    // don't do anything if dead
-    if(dead) {
-      return;
     }
 
     // set up max speed
