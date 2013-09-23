@@ -93,6 +93,13 @@ public class Player1 : MonoBehaviour {
 	// Update is called once per frame
   void Update() {
 
+    // disable shields
+    if(shield.activated == true && Mathf.Round(shield.life) <= 0) {
+      Debug.Log("SHOULD BE DEACT");
+      deactivateShield();
+    }
+
+
     if(builder == true){
       gameObject.renderer.material = BuilderMaterial;
     }
@@ -125,6 +132,9 @@ public class Player1 : MonoBehaviour {
       gameObject.rigidbody.velocity = new Vector3(0, 0, 0);
 
       deathDisplayTime = "";
+      // if it's a builder, give him 3 wood
+      if(builder)
+        wood += 3;
     } else if(deathTimer != 0 && dead){
       // if not in the beginning, but is dead
       deathDisplayTime = (Mathf.Round((deathTimer - Time.time) * 100f) / 100f).ToString();
@@ -155,12 +165,13 @@ public class Player1 : MonoBehaviour {
         sword.active = true;
         swordTimer = Time.time + delay;
       }
-      else if(shield.life > 20 && !shield.activated){
+      else if(shield.life > 10 && !shield.activated){
         activateShield();
+        Debug.Log("SHOULD BE DEACe");
       }
-      else if(shield.activated) {
-        deactivateShield();
-      }
+        //       Debug.Log("SHOULD BE DE");
+        // Debug.Log(shield.activated);
+        // Debug.Log(Mathf.Round(shield.lifshield.lifee));
     }
 
     // hide the shield on button up
@@ -175,7 +186,7 @@ public class Player1 : MonoBehaviour {
     // shield.collider.enabled = true;
     shield.activated = true;
     // requires 20 so you can't just spam it
-    shield.life -= 20.0f;
+    shield.life -= 10.0f;
   }
 
   void deactivateShield(){
@@ -241,8 +252,8 @@ public class Player1 : MonoBehaviour {
       rigidbody.AddTorque(new Vector3(0, 0, 3000.0f));
       rigidbody.velocity = new Vector3(rigidbody.velocity.x,0,rigidbody.velocity.z);
       rigidbody.AddForce(0, Mathf.Abs(Physics.gravity.y) + jumpAcc, 0);
-      if(builder)
-        doubleJump = false;
+      // if(builder)
+      doubleJump = false;
     }
     verticalMovement += Physics.gravity.y * Time.deltaTime;
     moveVertical(verticalMovement * Time.deltaTime);
@@ -282,6 +293,9 @@ public class Player1 : MonoBehaviour {
     else if(collider.CompareTag("UFO")) {
       // if shielded
       if(shield.activated){
+        GameObject g = GameObject.Find("Environment");
+        Environment globalObj = g.GetComponent<Environment>();
+        globalObj.score += 300;
         UFO ufo = collider.GetComponent<UFO>();
         ufo.die();
       }
@@ -308,7 +322,16 @@ public class Player1 : MonoBehaviour {
     AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
     gameObject.transform.localScale = new Vector3(0,0,0);
     dead = true;
-    deathTimer = Time.time + deathDelay;
+
+    if(builder) {
+      deathDelay = 10;
+      deathTimer = Time.time + deathDelay;
+    }
+    else {
+      deathDelay = 5;
+      deathTimer = Time.time + deathDelay;
+    }
+
   }
 
 }

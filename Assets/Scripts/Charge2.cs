@@ -15,6 +15,6 @@ public class Charge2 : MonoBehaviour {
       GameObject g = GameObject.Find("Environment");
       globalObj = g.GetComponent<Environment>().player2;
     }
-    charge2Text.text = "Shield: " + globalObj.shield.life.ToString();
+    charge2Text.text = "Shield: " + Mathf.Round(globalObj.shield.life).ToString();
 	}
 }

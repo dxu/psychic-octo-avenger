@@ -60,7 +60,7 @@ public class Alien : MonoBehaviour {
 
       for(int i=0; i<Random.Range(0, 9.0f); i++){
         Wood wood = Instantiate(Resources.Load("Prefabs/WoodPrefab"),
-            gameObject.transform.position, Quaternion.identity) as Wood;
+            new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0), Quaternion.identity) as Wood;
       }
 
       die();
@@ -88,6 +88,8 @@ public class Alien : MonoBehaviour {
     GameObject newBullet = Instantiate(Resources.Load("Prefabs/AlienBulletPrefab"), spawnPos, Quaternion.identity) as GameObject;
     AlienBullet bulletComponent = newBullet.GetComponent<AlienBullet>();
     bulletComponent.ship = gameObject.GetComponent<Alien>();
+    AudioClip fireSound = (AudioClip)Resources.Load("Audio/shoot");
+    AudioSource.PlayClipAtPoint(fireSound, gameObject.transform.position);
 
     return bulletComponent;
   }

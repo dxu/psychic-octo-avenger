@@ -38,6 +38,9 @@ public class AlienBullet : MonoBehaviour {
         UFO ufo = collider.gameObject.GetComponent<UFO>();
         ufo.die();
         die();
+        GameObject g = GameObject.Find("Environment");
+        Environment globalObj = g.GetComponent<Environment>();
+        globalObj.score += 300;
       }
     }
     else if(collider.CompareTag("Shield")) {

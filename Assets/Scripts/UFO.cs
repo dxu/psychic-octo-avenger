@@ -19,6 +19,7 @@ public class UFO : MonoBehaviour {
     GameObject g = GameObject.Find("Environment");
     Environment globalObj = g.GetComponent<Environment>();
     globalObj.freeHumans();
+
     // set all humans to be not floating
     Destroy(gameObject);
   }

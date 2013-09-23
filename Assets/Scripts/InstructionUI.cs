@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TitleUI : MonoBehaviour {
-
+public class InstructionUI : MonoBehaviour {
   private GUIStyle buttonStyle;
 	// Use this for initialization
 	void Start () {
@@ -16,18 +15,13 @@ public class TitleUI : MonoBehaviour {
   void OnGUI() {
     GUILayout.BeginArea(new Rect(10, Screen.height / 2 + 100, Screen.width -10, 200));
 
-    if(GUILayout.Button("New Game")) {
+    if(GUILayout.Button("Start Game")) {
       Application.LoadLevel("GameplayScene");
     }
-
-    if(GUILayout.Button("Instructions")) {
-      Application.LoadLevel("InstructionScene");
-    }
-
     if(GUILayout.Button("Exit")) {
       Application.Quit();
     }
-
     GUILayout.EndArea();
   }
+
 }

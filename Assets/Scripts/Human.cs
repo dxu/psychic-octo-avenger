@@ -31,7 +31,7 @@ public class Human : MonoBehaviour {
     else {
       gameObject.rigidbody.velocity = new Vector3(0, gameObject.rigidbody.velocity.y, 0);
       // gameObject.transform.position += new Vector3(0, vert_speed, 0);
-      gameObject.rigidbody.AddForce(new Vector3(0, 420f, 0));
+      gameObject.rigidbody.AddForce(new Vector3(0, 430f, 0));
     }
 	}
 
@@ -45,8 +45,14 @@ public class Human : MonoBehaviour {
     globalObj.humanCount -= 1;
     floating = false;
     Destroy(gameObject);
-    if(globalObj.humanCount == 0)
+    if(globalObj.humanCount == 0) {
+      if(globalObj.score > PlayerPrefs.GetFloat("High")) {
+        PlayerPrefs.SetFloat("Old", PlayerPrefs.GetFloat("High"));
+        PlayerPrefs.SetFloat("High", globalObj.score);
+      }
+      PlayerPrefs.SetFloat("New", globalObj.score);
       Application.LoadLevel("GameOverScene");
+    }
   }
 
   public void takeDamage() {
